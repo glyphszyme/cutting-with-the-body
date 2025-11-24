@@ -1,18 +1,28 @@
+"use client";
 import Link from "next/link";
+
+import { useSetCornerLinks } from "@/hooks/useSetCornerLinks";
 
 
 export default function NoticePage() {
-  return (
-    <div className="container">
-      <main>
-        <h1>재단하기 전 주의사항</h1>
+    useSetCornerLinks({
+        links: [
+            { slot: 'bottom-left-center', href: '/', label: '처음으로' },
+            { slot: 'bottom-right-center', href: '/select', label: '뒤로가기' },
+        ]
+    });
+    
+    return (
+        <div className="container">
+            <main>
+                <h1>재단하기 전 주의사항</h1>
 
-        <h1>재단하기 전, 본인의 신장과 어깨너비가 필요합니다.</h1>
-        
-        <Link href="cut">
-          재단하기
-        </Link>
-      </main>
-    </div>
-  );
+                <h1>재단하기 전, 본인의 신장과 어깨너비가 필요합니다.</h1>
+                
+                <Link href="cut">
+                    재단하기
+                </Link>
+            </main>
+        </div>
+    );
 }

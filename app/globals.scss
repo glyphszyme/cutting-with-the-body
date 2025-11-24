@@ -1,0 +1,83 @@
+@use '../styles/corners';
+
+
+// ============================================
+// Variables
+// ============================================
+:root {
+    // Colors
+    --color-background: #FFFFFF;
+    --color-text: #000000;
+    
+    // Typography
+    --font-size-base: 15px;
+    --font-size-large: 20px;
+
+    // Layout
+    --corner-line-length: 20px;
+    --corner-line-thickness: 1px;
+    --outer-padding: 20px;
+    --inner-padding: 20px;
+}
+
+// ============================================
+// Base Styles
+// ============================================
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: var(--font-size-base);
+    background-color: var(--color-background);
+    color: var(--color-text);
+    -webkit-font-smoothing: antialiased;
+}
+
+// ============================================
+// Layout Components
+// ============================================
+
+// 전체 컨테이너
+.app-container {
+    padding: var(--outer-padding);
+    min-height: 100vh;
+
+    // 코너 프레임
+    .frame-with-corners {
+        position: relative;
+        width: 100%;
+        min-height: calc(100vh - var(--outer-padding) * 2);
+
+        // 콘텐츠 영역
+        .content-wrapper {
+            position: relative;
+            height: calc(100vh - calc(
+                var(--inner-padding) + var(--outer-padding)
+            ) * 2);
+            z-index: 1;
+            padding: var(--inner-padding);
+            min-height: 100%;
+        }
+    }
+}
+
+.text {
+    font-size: var(--font-size-base);
+    text-align: center;
+
+    &--large {
+        font-size: var(--font-size-large);
+    }
+}
+a {
+    color: inherit;
+    text-decoration: underline;
+}
+
+// ============================================
+// Corner Brackets & Links
+// ============================================
