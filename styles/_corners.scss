@@ -59,27 +59,27 @@
     height: auto;
     white-space: nowrap;
     
-    &.corner-slot-top-left-center {
-        top: 0;
-        left: 25%;
-        transform: translateX(-50%);
-    }
+    // &.corner-slot-top-left-center {
+    //     top: 0;
+    //     left: 25%;
+    //     transform: translateX(-50%);
+    // }
     
-    &.corner-slot-top-right-center {
-        top: 0;
-        left: 75%;
-        transform: translateX(-50%);
-    }
+    // &.corner-slot-top-right-center {
+    //     top: 0;
+    //     left: 75%;
+    //     transform: translateX(-50%);
+    // }
     
     &.corner-slot-bottom-left-center {
-        bottom: 0;
-        left: 25%;
+        bottom: 6px;
+        left: calc(25% + 10px);
         transform: translateX(-50%);
     }
     
     &.corner-slot-bottom-right-center {
-        bottom: 0;
-        left: 75%;
+        bottom: 6px;
+        left: calc(75% - 10px);
         transform: translateX(-50%);
     }
 }

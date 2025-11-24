@@ -1,4 +1,5 @@
 @use '../styles/corners';
+@use '../styles/cut';
 
 
 // ============================================
@@ -18,6 +19,12 @@
     --corner-line-thickness: 1px;
     --outer-padding: 20px;
     --inner-padding: 20px;
+    
+    // Safe Area (모바일 브라우저 툴바/노치 대응)
+    --safe-top: max(20px, env(safe-area-inset-top));
+    --safe-bottom: max(60px, env(safe-area-inset-bottom));
+    --safe-left: max(20px, env(safe-area-inset-left));
+    --safe-right: max(20px, env(safe-area-inset-right));
 }
 
 // ============================================
@@ -29,12 +36,23 @@
     box-sizing: border-box;
 }
 
+@font-face {
+    font-family: 'JoseonGulim';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.0/ChosunGu.woff') format('woff');
+    font-weight: normal;
+    font-display: swap;
+}
 body {
-    font-family: system-ui, -apple-system, sans-serif;
+    font-family: 'JoseonGulim', system-ui, -apple-system, sans-serif;
     font-size: var(--font-size-base);
+
     background-color: var(--color-background);
     color: var(--color-text);
     -webkit-font-smoothing: antialiased;
+    
+    // 모바일 스크롤 최적화
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
 }
 
 // ============================================
@@ -43,24 +61,24 @@ body {
 
 // 전체 컨테이너
 .app-container {
-    padding: var(--outer-padding);
-    min-height: 100vh;
+    // Safe area 적용 (모바일 툴바/노치 대응)
+    padding: var(--safe-top) var(--safe-right) var(--safe-bottom) var(--safe-left);
+    min-height: 100dvh; // dynamic viewport height (툴바 대응)
+    box-sizing: border-box;
 
     // 코너 프레임
     .frame-with-corners {
         position: relative;
         width: 100%;
-        min-height: calc(100vh - var(--outer-padding) * 2);
+        min-height: calc(100dvh - var(--safe-top) - var(--safe-bottom));
 
         // 콘텐츠 영역
         .content-wrapper {
             position: relative;
-            height: calc(100vh - calc(
-                var(--inner-padding) + var(--outer-padding)
-            ) * 2);
+            min-height: calc(100dvh - var(--safe-top) - var(--safe-bottom) - var(--inner-padding) * 2);
             z-index: 1;
             padding: var(--inner-padding);
-            min-height: 100%;
+            box-sizing: border-box;
         }
     }
 }
@@ -68,6 +86,7 @@ body {
 .text {
     font-size: var(--font-size-base);
     text-align: center;
+    line-height: 1.5;
 
     &--large {
         font-size: var(--font-size-large);
@@ -76,6 +95,9 @@ body {
 a {
     color: inherit;
     text-decoration: underline;
+}
+li {
+    list-style: none;
 }
 
 // ============================================
