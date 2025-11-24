@@ -2,70 +2,16 @@
 
 import { useState } from "react";
 import { useSetCornerLinks } from "@/hooks/useSetCornerLinks";
-
-const bodyParts = [
-    // 그룹 1: 손과 팔
-    {
-        group: "hand-arm-1",
-        parts: [
-            { id: "palm", label: "손바닥" },
-            { id: "back-hand", label: "손등" },
-            { id: "fingertip", label: "손끝" },
-        ]
-    },
-    {
-        group: "hand-arm-2",
-        parts: [
-            { id: "arm", label: "팔" },
-            { id: "forearm", label: "팔뚝" },
-            { id: "elbow", label: "팔꿈치" },
-        ]
-    },
-    // 그룹 2: 발과 다리
-    {
-        group: "foot-leg-1",
-        parts: [
-            { id: "sole", label: "발바닥" },
-            { id: "back-foot", label: "발등" },
-            { id: "toe", label: "발끝" },
-        ]
-    },
-    {
-        group: "foot-leg-2",
-        parts: [
-            { id: "leg", label: "다리" },
-            { id: "thigh", label: "허벅지" },
-            { id: "calf", label: "종아리" },
-            { id: "shin", label: "정강이" },
-        ]
-    },
-    // 그룹 3: 몸통과 머리
-    {
-        group: "body-head-1",
-        parts: [
-            { id: "hip", label: "엉덩이" },
-            { id: "shoulder", label: "어깨" },
-            { id: "chest", label: "가슴" },
-            { id: "back", label: "등" },
-        ]
-    },
-    {
-        group: "body-head-2",
-        parts: [
-            { id: "back-head", label: "뒷통수" },
-            { id: "crown", label: "정수리" },
-            { id: "face", label: "얼굴" },
-            { id: "neck", label: "목" },
-        ]
-    },
-];
+import FormInput from "@/components/FormInput";
+import BodyPartSelector from "@/components/BodyPartSelector";
+import { bodyPartGroups } from "@/data/bodyParts";
 
 interface FormData {
-        height: string;
-        shoulderWidth: string;
-        width: string;
-        length: string;
-        bodyParts: string[];
+    height: string;
+    shoulderWidth: string;
+    width: string;
+    length: string;
+    bodyParts: string[];
 }
 
 export default function CutPage() {
@@ -159,74 +105,24 @@ export default function CutPage() {
                         <div className="text">입력해 주세요.</div>
                     </div>
                     
-                    <div></div>
                     <form onSubmit={handleNext}>
-                        <div className="form-group" style={{
-                            backgroundColor: 'black',
-                            color: 'white',
-                            height: 67,
-                            margin: '10px 0',
-                        }}>
-                            <label htmlFor="height" style={{
-                                fontSize: '20px',
-                                left: '55px',
-                                position: 'absolute',
-                            }}>신<br />장</label>
-                            <input
-                                type="number"
-                                id="height"
-                                value={formData.height}
-                                onChange={(e) => handleInputChange("height", e.target.value)}
-                                placeholder="161"
-                                style={{
-                                    width: '100px',
-                                    textAlign: 'right',
-                                    fontSize: '20px',
-                                    position: 'absolute',
-                                    right: '100px',
-                                }}
-                                required
-                            />
-                            <label htmlFor="height" style={{
-                                fontSize: '20px',
-                                position: 'absolute',
-                                right: '55px',
-                            }}>cm</label>
-                        </div>
-                    </form>
-                    <form onSubmit={handleNext}>
-                        <div className="form-group" style={{
-                            backgroundColor: 'black',
-                            color: 'white',
-                            height: 67,
-                            margin: '10px 0',
-                        }}>
-                            <label htmlFor="shoulderWidth" style={{
-                                fontSize: '20px',
-                                left: '55px',
-                                position: 'absolute',
-                            }}>어<br />깨</label>
-                            <input
-                                type="number"
-                                id="shoulderWidth"
-                                value={formData.shoulderWidth}
-                                onChange={(e) => handleInputChange("shoulderWidth", e.target.value)}
-                                placeholder="40"
-                                style={{
-                                    width: '100px',
-                                    textAlign: 'right',
-                                    fontSize: '20px',
-                                    position: 'absolute',
-                                    right: '100px',
-                                }}
-                                required
-                            />
-                            <label htmlFor="shoulderWidth" style={{
-                                fontSize: '20px',
-                                position: 'absolute',
-                                right: '55px',
-                            }}>cm</label>
-                        </div>
+                        <FormInput
+                            id="height"
+                            label="신장"
+                            value={formData.height}
+                            placeholder="161"
+                            unit="cm"
+                            onChange={(value) => handleInputChange("height", value)}
+                        />
+                        
+                        <FormInput
+                            id="shoulderWidth"
+                            label="어깨"
+                            value={formData.shoulderWidth}
+                            placeholder="40"
+                            unit="cm"
+                            onChange={(value) => handleInputChange("shoulderWidth", value)}
+                        />
 
                         <button type="submit">다음으로</button>
                     </form>
@@ -246,71 +142,23 @@ export default function CutPage() {
                     </div>
 
                     <form onSubmit={handleNext}>
-                        <div className="form-group" style={{
-                            backgroundColor: 'black',
-                            color: 'white',
-                            height: 67,
-                            margin: '10px 0',
-                        }}>
-                            <label htmlFor="height" style={{
-                                fontSize: '20px',
-                                left: '55px',
-                                position: 'absolute',
-                            }}>가<br />로</label>
-                            <input
-                                type="number"
-                                id="width"
-                                value={formData.width}
-                                onChange={(e) => handleInputChange("width", e.target.value)}
-                                placeholder="5"
-                                style={{
-                                    width: '100px',
-                                    textAlign: 'right',
-                                    fontSize: '20px',
-                                    position: 'absolute',
-                                    right: '90px',
-                                }}
-                                required
-                            />
-                            <label htmlFor="height" style={{
-                                fontSize: '20px',
-                                position: 'absolute',
-                                right: '55px',
-                            }}>개</label>
-                        </div>
+                        <FormInput
+                            id="width"
+                            label="가로"
+                            value={formData.width}
+                            placeholder="5"
+                            unit="개"
+                            onChange={(value) => handleInputChange("width", value)}
+                        />
 
-                        <div className="form-group" style={{
-                            backgroundColor: 'black',
-                            color: 'white',
-                            height: 67,
-                            margin: '10px 0',
-                        }}>
-                            <label htmlFor="height" style={{
-                                fontSize: '20px',
-                                left: '55px',
-                                position: 'absolute',
-                            }}>세<br />로</label>
-                            <input
-                                type="number"
-                                id="length"
-                                value={formData.length}
-                                onChange={(e) => handleInputChange("length", e.target.value)}
-                                placeholder="8"
-                                style={{
-                                    width: '100px',
-                                    textAlign: 'right',
-                                    fontSize: '20px',
-                                    position: 'absolute',
-                                    right: '90px',
-                                }}
-                                required
-                            />
-                            <label htmlFor="length" style={{
-                                fontSize: '20px',
-                                position: 'absolute',
-                                right: '55px',
-                            }}>개</label>
-                        </div>
+                        <FormInput
+                            id="length"
+                            label="세로"
+                            value={formData.length}
+                            placeholder="8"
+                            unit="개"
+                            onChange={(value) => handleInputChange("length", value)}
+                        />
 
                         <div className="button-group">
                             <button type="button" onClick={handlePrevious}>이전</button>
@@ -334,67 +182,11 @@ export default function CutPage() {
                 
                     <form onSubmit={handleSubmit}>
                         <div className="form-group">
-                            <div className="body-parts-container">
-                                {/* 그룹 1: 손과 팔 */}
-                                <div className="major-group">
-                                    {bodyParts.slice(0, 2).map((group) => (
-                                        <div key={group.group} className="body-part-group">
-                                            <div className="checkbox-group">
-                                                {group.parts.map((part) => (
-                                                    <button
-                                                        key={part.id}
-                                                        type="button"
-                                                        className={`body-part-button ${formData.bodyParts.includes(part.id) ? 'selected' : ''}`}
-                                                        onClick={() => handleBodyPartToggle(part.id)}
-                                                    >
-                                                        {part.label}
-                                                    </button>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-
-                                {/* 그룹 2: 발과 다리 */}
-                                <div className="major-group">
-                                    {bodyParts.slice(2, 4).map((group) => (
-                                        <div key={group.group} className="body-part-group">
-                                            <div className="checkbox-group">
-                                                {group.parts.map((part) => (
-                                                    <button
-                                                        key={part.id}
-                                                        type="button"
-                                                        className={`body-part-button ${formData.bodyParts.includes(part.id) ? 'selected' : ''}`}
-                                                        onClick={() => handleBodyPartToggle(part.id)}
-                                                    >
-                                                        {part.label}
-                                                    </button>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-
-                                {/* 그룹 3: 몸통과 머리 */}
-                                <div className="major-group">
-                                    {bodyParts.slice(4, 6).map((group) => (
-                                        <div key={group.group} className="body-part-group">
-                                            <div className="checkbox-group">
-                                                {group.parts.map((part) => (
-                                                    <button
-                                                        key={part.id}
-                                                        type="button"
-                                                        className={`body-part-button ${formData.bodyParts.includes(part.id) ? 'selected' : ''}`}
-                                                        onClick={() => handleBodyPartToggle(part.id)}
-                                                    >
-                                                        {part.label}
-                                                    </button>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
+                            <BodyPartSelector
+                                groups={bodyPartGroups}
+                                selected={formData.bodyParts}
+                                onToggle={handleBodyPartToggle}
+                            />
                         </div>
 
                         <div className="button-group">
