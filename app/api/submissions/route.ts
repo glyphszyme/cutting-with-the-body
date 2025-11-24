@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { createSupabaseClient } from "@/lib/supabase";
 
 // 데이터 저장
 export async function POST(request: NextRequest) {
   try {
+    const supabase = createSupabaseClient();
     const body = await request.json();
     
     const { data, error } = await supabase
@@ -39,6 +40,7 @@ export async function POST(request: NextRequest) {
 // 전체 데이터 조회 (선택사항)
 export async function GET() {
   try {
+    const supabase = createSupabaseClient();
     const { data, error } = await supabase
       .from('submissions')
       .select('*')

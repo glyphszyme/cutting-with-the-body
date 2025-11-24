@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { createSupabaseClient } from "@/lib/supabase";
 
 // 최신 데이터 조회
 export async function GET() {
   try {
+    const supabase = createSupabaseClient();
     const { data, error } = await supabase
       .from('submissions')
       .select('*')
