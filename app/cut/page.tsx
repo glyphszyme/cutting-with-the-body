@@ -1,33 +1,37 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useSetCornerLinks } from "@/hooks/useSetCornerLinks";
 import FormInput from "@/components/FormInput";
 import BodyPartSelector from "@/components/BodyPartSelector";
+import StepHeader from "@/components/StepHeader";
+import StepFooter from "@/components/StepFooter";
 import { bodyPartGroups } from "@/data/bodyParts";
 
 interface FormData {
-    height: string;
+    bodyHeight: string;
     shoulderWidth: string;
     width: string;
-    length: string;
+    height: string;
     bodyParts: string[];
 }
 
 export default function CutPage() {
+    const router = useRouter();
     const [step, setStep] = useState(1);
 
     const [formData, setFormData] = useState<FormData>({
-        height: "",
+        bodyHeight: "",
         shoulderWidth: "",
         width: "",
-        length: "",
+        height: "",
         bodyParts: [],
     });
 
     const handleNext = (e: React.FormEvent) => {
         e.preventDefault();
-        if (step < 3) {
+        if (step < 4) {
             setStep(step + 1);
         }
     };
@@ -41,7 +45,9 @@ export default function CutPage() {
     useSetCornerLinks({
         links: [
             { slot: 'bottom-left-center', href: '/', label: '처음으로' },
-            { slot: 'bottom-right-center', onClick: handlePrevious, label: '뒤로가기' },
+            step === 1 
+                ? { slot: 'bottom-right-center', href: '/select', label: '뒤로가기' }
+                : { slot: 'bottom-right-center', onClick: handlePrevious, label: '뒤로가기' },
         ]
     });
 
@@ -60,16 +66,8 @@ export default function CutPage() {
             const result = await response.json();
 
             if (result.success) {
-                alert("데이터가 제출되었습니다!");
-                // 제출 후 폼 초기화
-                setFormData({
-                    height: "",
-                    shoulderWidth: "",
-                    width: "",
-                    length: "",
-                    bodyParts: [],
-                });
-                setStep(1);
+                // 제출 성공 시 바로 홈으로 이동
+                router.push('/');
             } else {
                 alert("제출에 실패했습니다. 다시 시도해주세요.");
             }
@@ -97,22 +95,19 @@ export default function CutPage() {
             <main>
                 {/* Step 1: 신장/어깨너비 */}
                 {step === 1 && (<>
-                    <div style={{
-                        marginTop: '50px', marginBottom: '50px'
-                    }}>
-                        <div className="text">1</div>
-                        <div className="text">본인의 신장과 어깨너비를</div>
-                        <div className="text">입력해 주세요.</div>
-                    </div>
+                    <StepHeader
+                        stepNumber={1}
+                        title={["본인의 신장과 어깨너비를", "입력해 주세요."]}
+                    />
                     
                     <form onSubmit={handleNext}>
                         <FormInput
-                            id="height"
+                            id="bodyHeight"
                             label="신장"
-                            value={formData.height}
+                            value={formData.bodyHeight}
                             placeholder="161"
                             unit="cm"
-                            onChange={(value) => handleInputChange("height", value)}
+                            onChange={(value) => handleInputChange("bodyHeight", value)}
                         />
                         
                         <FormInput
@@ -124,22 +119,19 @@ export default function CutPage() {
                             onChange={(value) => handleInputChange("shoulderWidth", value)}
                         />
 
+                        <StepFooter lines={["*신장과 어깨너비를 모르는 경우,", "아래의 줄자를 이용해주세요."]} />
+
                         <button type="submit">다음으로</button>
                     </form>
 
-                    <div className="text">*신장과 어깨너비를 모르는 경우,</div>
-                    <div className="text">아래의 줄자를 이용해주세요.</div>
                 </>)}
 
                 {/* Step 2: 가로/세로 */}
                 {step === 2 && (<>
-                    <div style={{
-                        marginTop: '50px', marginBottom: '50px'
-                    }}>
-                        <div className="text">2</div>
-                        <div className="text">매트 위에 신체가 닿는 영역의</div>
-                        <div className="text">가로와 세로 모듈 수를 입력해 주세요.</div>
-                    </div>
+                    <StepHeader
+                        stepNumber={2}
+                        title={["매트 위에 신체가 닿는 영역의", "가로와 세로 모듈 수를 입력해 주세요."]}
+                    />
 
                     <form onSubmit={handleNext}>
                         <FormInput
@@ -152,35 +144,29 @@ export default function CutPage() {
                         />
 
                         <FormInput
-                            id="length"
+                            id="height"
                             label="세로"
-                            value={formData.length}
+                            value={formData.height}
                             placeholder="8"
                             unit="개"
-                            onChange={(value) => handleInputChange("length", value)}
+                            onChange={(value) => handleInputChange("height", value)}
                         />
 
-                        <div className="button-group">
-                            <button type="button" onClick={handlePrevious}>이전</button>
-                            <button type="submit">다음</button>
-                        </div>
+                        <StepFooter lines={["*매트 위 네모(ㅁㅁㅁ)는", "모듈 한 칸을 의미합니다."]} />
+
+                        <button type="submit">다음으로</button>
                     </form>
 
-                    <div className="text">*매트 위 네모(ㅁㅁㅁ)는</div>
-                    <div className="text">모듈 한 칸을 의미합니다.</div>
                 </>)}
 
                 {/* Step 3: 신체 부위 다중 선택 */}
                 {step === 3 && (<>
-                    <div style={{
-                        marginTop: '50px', marginBottom: '50px'
-                    }}>
-                        <div className="text">3</div>
-                        <div className="text">매트에 닿은 신체 부위의 명칭을</div>
-                        <div className="text">골라주세요.</div>
-                    </div>
+                    <StepHeader
+                        stepNumber={3}
+                        title={["매트에 닿은 신체 부위의 명칭을", "골라주세요."]}
+                    />
                 
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={handleNext}>
                         <div className="form-group">
                             <BodyPartSelector
                                 groups={bodyPartGroups}
@@ -189,10 +175,30 @@ export default function CutPage() {
                             />
                         </div>
 
-                        <div className="button-group">
-                            <button type="button" onClick={handlePrevious}>이전</button>
-                            <button type="submit">제출</button>
-                        </div>
+                        <button type="submit">다음으로</button>
+                    </form>
+                </>)}
+
+                {/* Step 4: 제출 동의 */}
+                {step === 4 && (<>
+                    <StepHeader
+                        stepNumber={4}
+                        title={["입력하신 정보는 이후 연구 및", "아카이브 작업에 활용됩니다.", "이에 동의하시나요?"]}
+                    />
+                
+                    <form onSubmit={handleSubmit}>
+                        <button type="submit" style={{
+                            width: '200px',
+                            height: '67px',
+                            backgroundColor: 'black',
+                            color: 'white',
+                            fontSize: '20px',
+                            position: 'absolute',
+                            left: '50%',
+                            bottom: '10%',
+                            textDecoration: 'none',
+                            transform: 'translate(-50%, -50%)',
+                        }}>동의 및 업로드</button>
                     </form>
                 </>)}
             </main>

@@ -27,21 +27,38 @@
     --safe-right: max(20px, env(safe-area-inset-right));
 }
 
-// ============================================
-// Base Styles
-// ============================================
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
 
+// ============================================
+// Typefaces
+// ============================================
 @font-face {
     font-family: 'JoseonGulim';
     src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.0/ChosunGu.woff') format('woff');
     font-weight: normal;
     font-display: swap;
 }
+
+
+// ============================================
+// Reset
+// ============================================
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+a {
+    color: inherit;
+    text-decoration: underline;
+}
+li {
+    list-style: none;
+}
+
+// ============================================
+// Layout Components
+// ============================================
+
 body {
     font-family: 'JoseonGulim', system-ui, -apple-system, sans-serif;
     font-size: var(--font-size-base);
@@ -54,10 +71,6 @@ body {
     overscroll-behavior: none;
     -webkit-overflow-scrolling: touch;
 }
-
-// ============================================
-// Layout Components
-// ============================================
 
 // 전체 컨테이너
 .app-container {
@@ -86,20 +99,13 @@ body {
 .text {
     font-size: var(--font-size-base);
     text-align: center;
-    line-height: 1.5;
+    line-height: 1.33;
+    word-break: keep-all;
 
+    &--header {
+        margin: 50px auto;
+    }
     &--large {
         font-size: var(--font-size-large);
     }
 }
-a {
-    color: inherit;
-    text-decoration: underline;
-}
-li {
-    list-style: none;
-}
-
-// ============================================
-// Corner Brackets & Links
-// ============================================

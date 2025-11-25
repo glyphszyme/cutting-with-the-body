@@ -11,7 +11,7 @@ export const poses: Pose[] = [
         id: 'savasana',
         name: '사바아사나',
         target_area: ['몸 전체'],
-        description: '등을 대고 누운 뒤, 손과 팔은 자연스럽게 벌린다.'
+        description: '등을 대고 누운 뒤, 손과 팔은 자연스럽게 벌린다.',
     },
     {
         id: 'anjaneyasana',

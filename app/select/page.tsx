@@ -14,18 +14,21 @@ export default function SelectPage() {
     return (
         <div className="container">
             <main>
-                <div style={{ marginTop: '50px' }}>
-                    <div className="text">아래 6가지 동작들을 클릭해</div>
-                    <div className="text">매트 위에서 따라해보세요.</div>
+                <div className="text text--header">
+                    <div>아래 6가지 동작들을 클릭해</div>
+                    <div>매트 위에서 따라해보세요.</div>
                 </div>
                 
-                <ul className="pose-list"
-                    style={{ marginTop: '100px' }}>
+                <ul className="pose-list" style={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, 0)',
+                }}>
                     {poses.map((pose) => (
                         <li key={pose.id}>
                             <Link href={`/select/${pose.id}`}>
-                                <h3>{pose.name}</h3>
-                                {/* <p>{pose.description}</p> */}
+                                <div className="text">{pose.name}</div>
                             </Link>
                         </li>
                     ))}

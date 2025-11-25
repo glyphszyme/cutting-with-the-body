@@ -93,8 +93,13 @@
     pointer-events: auto;
 }
 
-// 버튼 타입 링크 (onClick 사용)
+// 버튼 타입 링크 (onClick 사용) - .corner-link 스타일 상속
 .corner-link-button {
+    display: inline-block;
+    width: auto;
+    text-decoration: underline;
+    color: var(--color-text);
+    pointer-events: auto;
     background: none;
     border: none;
     padding: 0;

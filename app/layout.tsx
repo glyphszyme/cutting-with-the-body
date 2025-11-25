@@ -1,5 +1,6 @@
-import type { Metadata } from "next";
 import "./globals.scss";
+
+import type { Metadata } from "next";
 import { CornerLinksProvider } from "@/contexts/CornerLinksContext";
 import CornerBrackets from "@/components/CornerBrackets";
 

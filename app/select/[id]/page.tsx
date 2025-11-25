@@ -32,25 +32,42 @@ export default function PoseDetailPage() {
     return (
         <div className="container">
             <main>
-                <div style={{ marginTop: '50px' }}>
+                <div style={{
+                    marginTop: '50px',
+                    minHeight: `calc(100vh - var(--outer-padding) * 9)`,
+                    textAlign: 'center',
+                    position: 'relative',
+                    flexDirection: 'column',
+                    display: 'flex', alignItems: 'center',
+                }}>
                     <div className="text--large" style={{ textAlign: 'center', marginBottom: '30px' }}>
                         {pose.name}
                     </div>
                     <div className="text">
                         ■ {pose.target_area.join(' · ')}
                     </div>
-                    {/* 여기에 포즈 이미지나 추가 정보를 넣을 수 있습니다 */}
+                    <img style={{
+                        maxWidth: '300px',
+                        height: 'auto',
+                    }} src={`/images/${pose.id}_bg.png`} alt={pose.name} />
                     <div className="text" style={{
                         position: 'absolute',
-                        bottom: '100px',
+                        width: '80%',
+                        bottom: '80px',
                     }}>
                         {pose.description}
                     </div>
                     
                     <div className="text" style={{
+                        lineHeight: '1.33',
                         position: 'absolute',
-                        textAlign: 'center',
-                        bottom: '50px',
+                        textDecoration: 'underline',
+                        border: 'none',
+                        left: '50%',
+                        // marginTop: '20px',
+                        bottom: 'var(--outer-padding)',
+                        fontSize: 'var(--font-size-base)',
+                        transform: 'translateX(-50%)',
                     }}>
                         <Link href="/">다음으로</Link>
                     </div>

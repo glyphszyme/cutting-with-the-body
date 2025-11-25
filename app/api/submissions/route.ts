@@ -10,10 +10,10 @@ export async function POST(request: NextRequest) {
         const { data, error } = await supabase
             .from('submissions')
             .insert([{
-                height: body.height,
+                body_height: body.bodyHeight,
                 shoulder_width: body.shoulderWidth,
                 width: body.width,
-                length: body.length,
+                height: body.height,
                 body_parts: body.bodyParts,
             }])
             .select()

@@ -18,44 +18,25 @@ export default function FormInput({
     required = true,
 }: FormInputProps) {
     return (
-        <div className="form-group" style={{
-            backgroundColor: 'black',
-            color: 'white',
-            height: 67,
-            margin: '10px 0',
-        }}>
-            <label htmlFor={id} style={{
-                fontSize: '20px',
-                left: '55px',
-                position: 'absolute',
-            }}>
-                {label.split('').map((char, i) => (
-                    <span key={i}>
-                        {char}
-                        {i < label.length - 1 && <br />}
-                    </span>
-                ))}
-            </label>
+        <div className="form-input-container  text text--large">
+                <label htmlFor={id} className="form-input-label-left">
+                    {label.split('').map((char, i) => (
+                        <span key={i}>
+                            {char}
+                            {i < label.length - 1 && <br />}
+                        </span>
+                    ))}
+                </label>
             <input
+                className="text text--large"
                 type="number"
                 id={id}
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
                 placeholder={placeholder}
-                style={{
-                    width: '100px',
-                    textAlign: 'right',
-                    fontSize: '20px',
-                    position: 'absolute',
-                    right: '100px',
-                }}
                 required={required}
             />
-            <label htmlFor={id} style={{
-                fontSize: '20px',
-                position: 'absolute',
-                right: '55px',
-            }}>
+            <label htmlFor={id} className="form-input-label-right">
                 {unit}
             </label>
         </div>

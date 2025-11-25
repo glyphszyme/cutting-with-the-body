@@ -1,5 +1,68 @@
 // Cut 페이지 전용 스타일
 
+// FormInput 컴포넌트
+.form-input-container {
+    position: relative;
+    height: 67px;
+
+    background-color: var(--color-text);
+    color: var(--color-background);
+    margin: var(--outer-padding) 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    .form-input-label-left {
+        position: absolute;
+        left: calc(var(--outer-padding) * 2);
+    }
+    
+    input[type="number"] {
+        position: absolute;
+        right: calc(var(--outer-padding) + 50px);
+        width: 100px;
+        text-align: right;
+        
+        border: none;
+        background: transparent;
+        color: inherit;
+
+        font-family: inherit;
+        padding: 0;
+        outline: none;
+        
+        // 숫자 입력 화살표 제거
+        -moz-appearance: textfield;
+        
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        
+        &::placeholder {
+            color: inherit;
+            opacity: 0.5;
+        }
+    }
+    
+    .form-input-label-right {
+        position: absolute;
+        right: calc(var(--outer-padding) * 1.5);
+    }
+}
+
+// StepHeader 스타일
+.step-header {
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+.step-footer {
+    margin-top: 50px;
+}
+
+// 기존 form-group 스타일 (다른 곳에서 사용 중일 수 있음)
 .form-group {
     display: flex;
     align-items: center;
@@ -78,4 +141,18 @@
     flex-wrap: wrap;
     gap: 15px 17px;
     justify-content: left;
+}
+
+
+button[type="submit"] {
+    line-height: 1.33;
+    position: absolute;
+    text-decoration: underline;
+    border: none;
+    left: 50%;
+    // margin-top: 20px;
+    bottom: var(--outer-padding);
+    font-family: 'JoseonGulim', system-ui, -apple-system, sans-serif;
+    font-size: var(--font-size-base);
+    transform: translateX(-50%);
 }
