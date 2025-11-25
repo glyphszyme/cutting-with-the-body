@@ -4,14 +4,15 @@ import { createSupabaseClient } from "@/lib/supabase";
 // 특정 ID의 데이터 조회
 export async function GET(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
+        const { id } = await params;
         const supabase = createSupabaseClient();
         const { data, error } = await supabase
             .from('submissions')
             .select('*')
-            .eq('id', params.id)
+            .eq('id', id)
             .single();
 
         if (error) {
