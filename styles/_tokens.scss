@@ -1,0 +1,31 @@
+// ============================================
+// Typefaces
+// ============================================
+@font-face {
+    font-family: 'SMDinaru-Regular';
+    src: url('/fonts/SMDinaru-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-display: swap;
+}
+
+
+// ============================================
+// Design Tokens
+// ============================================
+
+:root {
+    // Colors
+    --color-bg: #FFFFFF;
+    --color-text: #000000;
+    
+    // Typography
+    --font-family-base: 'SMDinaru-Regular', system-ui, -apple-system, sans-serif;
+    --font-size-base: 15px;
+    --font-size-large: 20px;
+    --line-height-base: 1.67;
+    
+    // Layout
+    --crop-mark-length: 20px;
+    --padding-outer: 20px;
+    --padding-inner: 30px;
+}

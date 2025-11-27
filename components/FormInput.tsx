@@ -18,7 +18,9 @@ export default function FormInput({
     required = true,
 }: FormInputProps) {
     return (
-        <div className="form-input-container  text text--large">
+        <div className="form-input-container  text text--large" style={{
+            
+        }}>
                 <label htmlFor={id} className="form-input-label-left">
                     {label.split('').map((char, i) => (
                         <span key={i}>

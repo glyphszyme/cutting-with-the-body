@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { useSetCornerLinks } from "@/hooks/useSetCornerLinks";
+import { useSetFrameLinks } from "@/hooks/useSetFrameLinks";
 import { getPoseById } from "@/data/poses";
 
 export default function PoseDetailPage() {
@@ -10,10 +10,10 @@ export default function PoseDetailPage() {
     const id = params.id as string;
     const pose = getPoseById(id);
 
-    useSetCornerLinks({
+    useSetFrameLinks({
         links: [
-            { slot: 'bottom-left-center', href: '/', label: '처음으로' },
-            { slot: 'bottom-right-center', href: '/select', label: '뒤로가기' },
+            { slot: 'left', href: '/', label: '처음으로' },
+            { slot: 'right', href: '/select', label: '뒤로가기' },
         ]
     });
 

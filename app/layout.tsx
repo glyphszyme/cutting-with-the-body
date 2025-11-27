@@ -1,8 +1,7 @@
-import "./globals.scss";
+import "../styles/globals.scss";
 
 import type { Metadata } from "next";
-import { CornerLinksProvider } from "@/contexts/CornerLinksContext";
-import CornerBrackets from "@/components/CornerBrackets";
+import Frame from "@/components/Frame";
 
 export const metadata: Metadata = {
     title: "몸으로 재단하기",
@@ -20,16 +19,13 @@ export default function RootLayout({
                 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover, user-scalable=no" />
             </head>
             <body>
-                <CornerLinksProvider>
-                    <div className="app-container">
-                        <div className="frame-with-corners">
-                            <CornerBrackets />
-                            <div className="content-wrapper">
-                                {children}
-                            </div>
+                <div className="app-container">
+                    <Frame>
+                        <div className="content-wrapper">
+                            {children}
                         </div>
-                    </div>
-                </CornerLinksProvider>
+                    </Frame>
+                </div>
             </body>
         </html>
     );

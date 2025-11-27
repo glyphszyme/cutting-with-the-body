@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useSetCornerLinks } from "@/hooks/useSetCornerLinks";
+import { useSetFrameLinks } from "@/hooks/useSetFrameLinks";
 import { bodyPartGroups } from "@/data/bodyParts";
 
 export default function AdjustPage() {
@@ -16,9 +16,9 @@ export default function AdjustPage() {
     // 가상의 선택된 신체 부위 (테스트용)
     const selectedBodyParts = ["palm", "leg", "thigh"];
 
-    useSetCornerLinks({
+    useSetFrameLinks({
         links: [
-            { slot: 'bottom-left-center', href: '/', label: '처음으로' },
+            { slot: 'left', href: '/', label: '처음으로' },
         ]
     });
 

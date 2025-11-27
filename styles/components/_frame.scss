@@ -1,0 +1,119 @@
+@use '../tokens';
+
+// ============================================
+// Frame Component Styles
+// ============================================
+
+// Frame 컨테이너: app-container에서 outer padding 제외
+.frame {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+// ============================================
+// Crop Marks
+// ============================================
+
+// 공통 crop mark 스타일
+[class^="crop-mark-"] {
+    position: absolute;
+    width: var(--crop-mark-length);
+    height: var(--crop-mark-length);
+    pointer-events: none;
+}
+
+// Crop mark 위치별 스타일
+.crop-mark {
+    $border: 1px solid var(--color-text);
+    
+    &-top-left {
+        top: 0;
+        left: 0;
+        border-bottom: $border;
+        border-right: $border;
+    }
+    
+    &-top-center {
+        top: 0;
+        left: 50%;
+        border-left: $border;
+    }
+    
+    &-top-right {
+        top: 0;
+        right: 0;
+        border-left: $border;
+        border-bottom: $border;
+    }
+    
+    &-bottom-left {
+        bottom: 0;
+        left: 0;
+        border-top: $border;
+        border-right: $border;
+    }
+    
+    &-bottom-center {
+        bottom: 0;
+        left: 50%;
+        border-left: $border;
+    }
+    
+    &-bottom-right {
+        bottom: 0;
+        right: 0;
+        border-top: $border;
+        border-left: $border;
+    }
+}
+
+// ============================================
+// Frame Links
+// ============================================
+
+// Frame link 슬롯 (링크 배치 위치)
+.frame-link-slot {
+    position: absolute;
+    
+    width: auto;
+    height: auto;
+    transform: translateX(-50%);
+    
+    white-space: nowrap;
+    z-index: 10;
+    pointer-events: auto;
+    
+    &-left {
+        left: calc(25% + var(--crop-mark-length) / 2);
+        bottom: -5px;
+    }
+    
+    &-center {
+        left: 50%;
+        bottom: 40px;
+    }
+    
+    &-right {
+        left: calc(75% - var(--crop-mark-length) / 2);
+        bottom: -5px;
+    }
+}
+
+// Frame link 기본 스타일 (Link와 button 모두 동일한 스타일)
+.frame-link {
+    // 공통 스타일
+    display: inline-block;
+    width: auto;
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-base);
+    text-decoration: underline;
+    color: var(--color-text);
+    background: white;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    pointer-events: auto;
+}

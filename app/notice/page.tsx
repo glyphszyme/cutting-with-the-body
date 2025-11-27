@@ -1,14 +1,14 @@
 "use client";
 import Link from "next/link";
 
-import { useSetCornerLinks } from "@/hooks/useSetCornerLinks";
+import { useSetFrameLinks } from "@/hooks/useSetFrameLinks";
 
 
 export default function NoticePage() {
-    useSetCornerLinks({
+    useSetFrameLinks({
         links: [
-            { slot: 'bottom-left-center', href: '/', label: '처음으로' },
-            { slot: 'bottom-right-center', href: '/select', label: '뒤로가기' },
+            { slot: 'left', href: '/', label: '처음으로' },
+            { slot: 'right', href: '/select', label: '뒤로가기' },
         ]
     });
     
