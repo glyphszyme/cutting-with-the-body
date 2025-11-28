@@ -1,0 +1,141 @@
+// ============================================
+// Reset
+// ============================================
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+a {
+    color: inherit;
+    text-decoration: underline;
+}
+li {
+    list-style: none;
+}
+
+// ============================================
+// Typefaces
+// ============================================
+@font-face {
+    font-family: 'SM3GothicStd';
+    src: url('/fonts/SM3GothicStd-03.otf') format('opentype');
+
+    font-weight: normal;
+    font-display: swap;
+}
+
+
+// ============================================
+// Design Tokens
+// ============================================
+
+:root {
+    // Colors
+    --color-bg: #000000;
+    --color-text: #FFFFFF;
+    
+    // Typography
+    --font-family-base: 'SM3GothicStd', system-ui, -apple-system, sans-serif;
+    
+    // Layout
+    --crop-mark-length: 20px;
+}
+
+.app-container {
+    width: 100vw;
+    height: 100vh;
+
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-family-base);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .container {
+        width: 33vh;
+        height: 99vh;
+        border: 1px solid red;
+        overflow: hidden;
+        
+        .frame {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            
+            .text-grid-container {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: blue;
+            }
+        }
+    }
+}
+
+[class^="crop-mark-"] {
+    position: absolute;
+    width: var(--crop-mark-length);
+    height: var(--crop-mark-length);
+    pointer-events: none;
+}
+
+// Crop mark 위치별 스타일
+.crop-mark {
+    $border: 1px solid var(--color-text);
+    
+    &-top-left {
+        top: 0;
+        left: 0;
+        border-bottom: $border;
+        border-right: $border;
+    }
+    
+    &-top-center {
+        top: 0;
+        left: 50%;
+        border-left: $border;
+    }
+    
+    &-top-right {
+        top: 0;
+        right: 0;
+        border-left: $border;
+        border-bottom: $border;
+    }
+
+    &-midle-left {
+        top: 50%;
+        left: 0;
+        border-top: $border;
+    }
+
+    &-midle-right {
+        top: 50%;
+        right: 0;
+        border-top: $border;
+    }
+    
+    &-bottom-left {
+        bottom: 0;
+        left: 0;
+        border-top: $border;
+        border-right: $border;
+    }
+    
+    &-bottom-center {
+        bottom: 0;
+        left: 50%;
+        border-left: $border;
+    }
+    
+    &-bottom-right {
+        bottom: 0;
+        right: 0;
+        border-top: $border;
+        border-left: $border;
+    }
+}

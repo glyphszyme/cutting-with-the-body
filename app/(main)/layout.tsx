@@ -1,4 +1,4 @@
-import "../styles/globals.scss";
+import "../../styles/globals.scss";
 
 import type { Metadata } from "next";
 import Frame from "@/components/Frame";

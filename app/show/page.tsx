@@ -1,101 +1,65 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { supabase } from "@/lib/supabase";
+import { buildBodyPartsString, calculateDisplaySize } from "@/lib/textUtils";
 
-const bodyPartsMap: Record<string, string> = {
-    // 손과 팔
-    palm: "손바닥",
-    "back-hand": "손등",
-    fingertip: "손끝",
-    arm: "팔",
-    forearm: "팔뚝",
-    elbow: "팔꿈치",
-    
-    // 발과 다리
-    sole: "발바닥",
-    "back-foot": "발등",
-    toe: "발끝",
-    leg: "다리",
-    thigh: "허벅지",
-    calf: "종아리",
-    shin: "정강이",
-    
-    // 몸통과 머리
-    hip: "엉덩이",
-    shoulder: "어깨",
-    chest: "가슴",
-    back: "등",
-    "back-head": "뒷통수",
-    crown: "정수리",
-    face: "얼굴",
-    neck: "목",
-};
-
-interface SubmissionData {
+interface AdjustmentData {
     id: number;
-    body_height: number;
-    shoulder_width: number;
     width: number;
     height: number;
-    body_parts: string[];
-    created_at: string;
+    user_id: string;
+    updated_at: string;
 }
 
+const TEXT_CONTENT = {
+    prefix: "이지면은",
+    main: "재단되어만들어진것으로부터비롯되었습니다인간의신체는오랫동안예술과건축의척도이자동시에우주와권력의상징으로기능해왔다고대그리스와로마의철학자들은인간의몸을우주의축소판으로보았고이에따라인간을위한공간의기준역시인간신체에서찾아야한다고생각했다고대로마의건축가비트루비우스는건축십서에서신체의각부분이조화롭게어우러져하나의전체를이루듯건축또한각부분이전체와미적인비례관계를가져야한다고주장했다그는건축의세가지기본요소를견고함유용함아름다움으로정의했으며이세요소가인간신체처럼균형을이루어야한다고보았다비트루비우스에게건축의비례는곧인간존재의비례였다신체의중심이배꼽에있고팔과다리를벌렸을때원과정사각형안에완벽히들어맞는다는생각에서비롯된그의이론은인체의비례를우주의질서와연결시키는몸을기준으로한설계의철학을확립했다이러한시도는인간을위한공간을만들기위한인문적탐구였지만동시에인간을하나의수학적단위와값으로환원하는제도적질서의시작이기도했다중세기독교사상가들은비트루비우스이론을수용해그리스도를우주적존재로이해하는소우주론으로발전시켰다즉인체비례의수리적기하학적규칙을그리스도의신체에적용해그리스도의몸이곧전체우주의구조적축소판이라는신학적시각을확립했다중세시대에제작된램버스궁세계지도는세계자체를그리스도의몸으로표현했다지도사방에그의신체부위가배치되어있는모습은마치그리스도가하늘과땅을포함한온우주를껴안고있는모습처럼보인다이는세상이곧그리스도의일부이자그가세계를온전히유지하는근간이라는중세신학의핵심개념을보여준다"
+};
+
+const TEST_DATA = {
+    bodyHeight: 178,
+    shoulderWidth: 50,
+    bodyParts: ["palm", "leg", "thigh"]
+};
+
 export default function ShowPage() {
-    const [latestData, setLatestData] = useState<SubmissionData | null>(null);
+    const [width, setWidth] = useState(0);
+    const [height, setHeight] = useState(0);
     const [loading, setLoading] = useState(true);
 
-    // 최신 데이터 가져오기
-    const fetchLatest = async () => {
-        try {
+    // 초기 데이터 가져오기
+    useEffect(() => {
+        const fetchInitial = async () => {
             const { data, error } = await supabase
-                .from('submissions')
+                .from('adjustments')
                 .select('*')
-                .order('created_at', { ascending: false })
-                .limit(1)
+                .eq('id', 1)
                 .single();
 
             if (error) {
-                if (error.code !== 'PGRST116') { // 데이터 없음 에러 무시
-                    console.error("Failed to fetch latest data:", error);
-                }
+                console.error('초기 데이터 로드 실패:', error);
             } else if (data) {
-                setLatestData(data);
+                setWidth(data.width);
+                setHeight(data.height);
             }
-        } catch (error) {
-            console.error("Failed to fetch latest data:", error);
-        } finally {
             setLoading(false);
-        }
-    };
+        };
 
-    // 초기 로드
-    useEffect(() => {
-        fetchLatest();
-        
-        // 5초마다 새로고침
-        const interval = setInterval(() => {
-            fetchLatest();
-        }, 100);
-        
-        return () => clearInterval(interval);
+        fetchInitial();
     }, []);
 
-    // 실시간 구독
+    // Realtime 구독
     useEffect(() => {
         const channel = supabase
-            .channel('submissions-changes')
+            .channel('adjustments-realtime')
             .on(
                 'postgres_changes',
-                {
-                    event: 'INSERT',
-                    schema: 'public',
-                    table: 'submissions'
-                },
+                { event: '*', schema: 'public', table: 'adjustments', filter: 'id=eq.1' },
                 (payload) => {
-                    console.log('New submission:', payload.new);
-                    setLatestData(payload.new as SubmissionData);
+                    const newData = payload.new as AdjustmentData;
+                    setWidth(newData.width);
+                    setHeight(newData.height);
                 }
             )
             .subscribe();
@@ -105,48 +69,65 @@ export default function ShowPage() {
         };
     }, []);
 
-    if (loading) {
-        return (
-            <div className="container">
-                <main>
-                    <h1>데이터를 불러오는 중...</h1>
-                </main>
-            </div>
-        );
-    }
+    // 텍스트 생성 (메모이제이션)
+    const displayText = useMemo(() => {
+        const bodyPartsText = buildBodyPartsString(TEST_DATA.bodyParts);
+        const fullText = TEXT_CONTENT.prefix + bodyPartsText + TEXT_CONTENT.main;
+        const maxChars = width * height;
+        return fullText.substring(0, maxChars);
+    }, [width, height]);
 
-    if (!latestData) {
-        return (
-            <div className="container">
-                <main>
-                    <h1>아직 제출된 데이터가 없습니다.</h1>
-                </main>
-            </div>
-        );
-    }
+    // 표시 크기 계산 (메모이제이션)
+    const { W_show_px, H_show_px } = useMemo(() => 
+        calculateDisplaySize(
+            TEST_DATA.bodyHeight,
+            TEST_DATA.shoulderWidth,
+            width,
+            height,
+            2, // CHAR_SIZE_CM
+            0.1 // cmToPx
+        ),
+        [width, height]
+    );
 
-    const bodyPartsText = latestData.body_parts
-        .map((id) => bodyPartsMap[id] || id)
-        .join(", ");
+    // 글자 크기 계산
+    const charWidthPx = W_show_px / width;
+    const charHeightPx = H_show_px / height;
+    const fontSize = Math.min(charWidthPx, charHeightPx) * 0.8;
 
     return (
+        // 180cm * 60cm 실제 매트
         <div className="container">
-            <main>
-                <h1>
-                    이 지면은 {bodyPartsText}이(가) 재단되어 만들어졌습니다.
-                </h1>
-                <div className="measurements">
-                    <p>신장: {latestData.body_height}cm</p>
-                    <p>어깨너비: {latestData.shoulder_width}cm</p>
-                    <p>가로: {latestData.width}개</p>
-                    <p>세로: {latestData.height}개</p>
+            <div className="frame">
+                <div className="crop-mark-top-left" />
+                <div className="crop-mark-top-center" />
+                <div className="crop-mark-top-right" />
+                <div className="crop-mark-midle-left" />
+                <div className="crop-mark-midle-right" />
+                <div className="crop-mark-bottom-left" />
+                <div className="crop-mark-bottom-center" />
+                <div className="crop-mark-bottom-right" />
+                <div 
+                    className="text-grid-container"
+                    style={{
+                        display: 'grid',
+                        gridTemplateColumns: `repeat(${width}, 1fr)`,
+                        gridTemplateRows: `repeat(${height}, 1fr)`,
+                    }}
+                >
+                    {displayText.split('').map((char, index) => (
+                        <div key={index} style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontSize: `${fontSize}px`,
+                            overflow: 'hidden',
+                        }}>
+                            {char}
+                        </div>
+                    ))}
                 </div>
-                <div className="timestamp">
-                    <small>
-                        마지막 업데이트: {new Date(latestData.created_at).toLocaleString("ko-KR")}
-                    </small>
-                </div>
-            </main>
+            </div>
         </div>
     );
 }
