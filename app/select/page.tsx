@@ -13,14 +13,56 @@ export default function SelectPage() {
         ]
     });
 
-    // 이미지 위치 설정 (6개)
+    // 이미지 위치 및 크기 설정 (6개) - 중심점 기준
     const imagePositions = [
-        { id: poses[0].id, name: poses[0].name, top: '50px', left: '100px' },
-        { id: poses[1].id, name: poses[1].name, top: '50px', left: '300px' },
-        { id: poses[2].id, name: poses[2].name, top: '200px', left: '100px' },
-        { id: poses[3].id, name: poses[3].name, top: '200px', left: '300px' },
-        { id: poses[4].id, name: poses[4].name, top: '100px', left: '200px' },
-        { id: poses[5].id, name: poses[5].name, top: '250px', left: '200px' },
+        {
+            // 누워있는
+            id: poses[0].id, 
+            name: poses[0].name, 
+            centerX: '32%',  // 중심점 X 좌표 (%)
+            centerY: '22%',  // 중심점 Y 좌표 (%)
+            scale: 5.9       // 크기 비율 (bg 대비 %, 1.0 = 10%)
+        },
+        { 
+            // 앉아있는
+            id: poses[1].id, 
+            name: poses[1].name, 
+            centerX: '80%', 
+            centerY: '24%', 
+            scale: 4.4 
+        },
+        { 
+            // 엎드려있는
+            id: poses[2].id, 
+            name: poses[2].name, 
+            centerX: '50%', 
+            centerY: '74%', 
+            scale: 7.0
+        },
+        { 
+            // 발을 뻗고있는
+            id: poses[3].id, 
+            name: poses[3].name, 
+            centerX: '19%', 
+            centerY: '48%', 
+            scale: 5.0 
+        },
+        { 
+            // 하늘을 보는
+            id: poses[4].id, 
+            name: poses[4].name, 
+            centerX: '83%', 
+            centerY: '56%', 
+            scale: 3.7
+        },
+        { 
+            // 생각하는
+            id: poses[5].id, 
+            name: poses[5].name, 
+            centerX: '48%', 
+            centerY: '44%', 
+            scale: 4.3
+        },
     ];
 
     const handleImageClick = (e: React.MouseEvent<HTMLImageElement>, imageId: string) => {
@@ -66,34 +108,45 @@ export default function SelectPage() {
                 
                 {/* 프레임과 이미지 그룹 */}
                 <div className="image-frame" style={{
-                    position: 'relative',
+                    position: 'absolute',
+                    top: 'calc(50% + 40px)',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
                     width: '100%',
-                    height: '100vh',
-                    background: 'white',
-                    border: '1px solid currentColor',
-                    margin: '40px auto',
+                    zIndex: '-2',
                 }}>
+                    {/* 배경 이미지 (액자) */}
+                    <img
+                        src="/images/bg.png"
+                        alt="background frame"
+                        style={{
+                            width: '100%',
+                            height: 'auto',
+                            display: 'block',
+                            pointerEvents: 'none',
+
+                            // border: '1px solid red',
+                        }}
+                    />
+                    
+                    {/* 클릭 가능한 이미지들 - bg에 대한 absolute 위치 */}
                     {imagePositions.map((image) => (
-                        <div
+                        <img
                             key={image.id}
+                            src={`/images/${image.id}.png`} 
+                            alt={image.name}
+                            onClick={(e) => handleImageClick(e, image.id)}
                             style={{
                                 position: 'absolute',
-                                top: image.top,
-                                left: image.left,
+                                top: image.centerY,
+                                left: image.centerX,
+                                transform: 'translate(-50%, -50%)', // 중심점 기준 정렬
+                                width: `${10 * image.scale}%`, // bg 너비 대비 %
+                                height: 'auto',
+                                display: 'block',
+                                cursor: 'pointer',
                             }}
-                        >
-                            <img
-                                src={`/images/${image.id}.png`} 
-                                alt={image.name}
-                                onClick={(e) => handleImageClick(e, image.id)}
-                                style={{
-                                    width: '100px',
-                                    height: 'auto',
-                                    display: 'block',
-                                    cursor: 'pointer',
-                                }}
-                            />
-                        </div>
+                        />
                     ))}
                 </div>
             </main>

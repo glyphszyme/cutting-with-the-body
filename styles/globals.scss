@@ -52,9 +52,12 @@ body {
 // 콘텐츠 영역: frame에서 crop mark 길이만큼 제외
 .content-wrapper {
     position: relative;
-    // width: calc(100% - var(--crop-mark-length) * 2);
+    width: calc(100% - var(--crop-mark-length) * 2);
     height: calc(100% - var(--crop-mark-length) * 2);
-    margin: var(--crop-mark-length) 0;
+    // width: 100%;
+    // height: 100%;
+    margin: var(--crop-mark-length);
+    // margin: 0;
     padding: var(--padding-inner);
     z-index: 1;
     overflow: hidden;
@@ -68,5 +71,10 @@ body {
 
     &--large {
         font-size: var(--font-size-large);
+    }
+
+    &--notice {
+        line-height: var(--line-height-narrow);
+        margin: 10px 10px;
     }
 }

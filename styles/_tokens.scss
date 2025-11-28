@@ -23,9 +23,10 @@
     --font-size-base: 15px;
     --font-size-large: 20px;
     --line-height-base: 1.67;
+    --line-height-narrow: 1.5;
     
     // Layout
     --crop-mark-length: 20px;
     --padding-outer: 20px;
-    --padding-inner: 30px;
+    --padding-inner: var(--crop-mark-length);
 }

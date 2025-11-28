@@ -1,19 +1,24 @@
 "use client";
-import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useSetFrameLinks } from "@/hooks/useSetFrameLinks";
-import { getPoseById } from "@/data/poses";
+import { getPoseById, poses } from "@/data/poses";
 
 export default function PoseDetailPage() {
     const params = useParams();
-    const router = useRouter();
+    // const router = useRouter();
     const id = params.id as string;
     const pose = getPoseById(id);
 
+    // 현재 포즈의 인덱스 찾기
+    const currentIndex = poses.findIndex(p => p.id === id);
+    const nextIndex = (currentIndex + 1) % poses.length; // 마지막이면 처음으로
+    const nextPoseId = poses[nextIndex].id;
+
     useSetFrameLinks({
         links: [
-            { slot: 'left', href: '/', label: '처음으로' },
-            { slot: 'right', href: '/select', label: '뒤로가기' },
+            { slot: 'left', href: '/select', label: '모든자세보기' },
+            { slot: 'center', href: `/select/${nextPoseId}`, label: '다음자세보기' },
+            { slot: 'right', href: '/cut', label: '재단하기' },
         ]
     });
 
@@ -32,45 +37,27 @@ export default function PoseDetailPage() {
     return (
         <div className="container">
             <main>
-                <div style={{
-                    marginTop: '50px',
-                    minHeight: `calc(100vh - var(--outer-padding) * 9)`,
-                    textAlign: 'center',
-                    position: 'relative',
-                    flexDirection: 'column',
-                    display: 'flex', alignItems: 'center',
+                <div className="text text--large">
+                    {pose.name}
+                </div>
+                <div className="text" style={{
+                    borderTop: '1px solid var(--color-text)',
+                    borderBottom: '1px solid var(--color-text)',
+                    margin: '10px auto',
+                    padding: '10px 0',
                 }}>
-                    <div className="text--large" style={{ textAlign: 'center', marginBottom: '30px' }}>
-                        {pose.name}
-                    </div>
-                    <div className="text">
-                        ■ {pose.target_area.join(' · ')}
-                    </div>
-                    <img style={{
-                        maxWidth: '300px',
+                    ■ {pose.target_area.join('·')}
+                </div>
+
+                <img
+                    src={`/images/${pose.id}_bg.png`} alt={pose.name} style={{
+                        width: '100%',
                         height: 'auto',
-                    }} src={`/images/${pose.id}_bg.png`} alt={pose.name} />
-                    <div className="text" style={{
-                        position: 'absolute',
-                        width: '80%',
-                        bottom: '80px',
-                    }}>
-                        {pose.description}
-                    </div>
-                    
-                    <div className="text" style={{
-                        lineHeight: '1.33',
-                        position: 'absolute',
-                        textDecoration: 'underline',
-                        border: 'none',
-                        left: '50%',
-                        // marginTop: '20px',
-                        bottom: 'var(--outer-padding)',
-                        fontSize: 'var(--font-size-base)',
-                        transform: 'translateX(-50%)',
-                    }}>
-                        <Link href="/">다음으로</Link>
-                    </div>
+                    }}
+                />
+
+                <div className="text">
+                    {pose.description}
                 </div>
             </main>
         </div>

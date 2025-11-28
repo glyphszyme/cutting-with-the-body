@@ -87,7 +87,7 @@
     
     &-left {
         left: calc(25% + var(--crop-mark-length) / 2);
-        bottom: -5px;
+        bottom: -8px;
     }
     
     &-center {
@@ -97,7 +97,7 @@
     
     &-right {
         left: calc(75% - var(--crop-mark-length) / 2);
-        bottom: -5px;
+        bottom: -8px;
     }
 }
 

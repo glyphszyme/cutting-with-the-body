@@ -55,7 +55,7 @@ export default function HomePage() {
 
     useSetFrameLinks({
         links: lines.length >= 3 
-            ? [{ slot: 'center', href: '/select', label: '자세선택하기' }]
+            ? [{ slot: 'center', href: '/select', label: '자세둘러보기' }]
             : [],
     });
 
