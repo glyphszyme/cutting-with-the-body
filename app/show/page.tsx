@@ -8,7 +8,7 @@ import { buildBodyPartsString } from "@/lib/textUtils";
 // 프로젝터 캘리브레이션 후 아래 값들을 조정하세요
 
 // 픽셀/cm 비율 (프로젝터 투사 후 자로 측정하여 조정)
-const PX_PER_CM = 54.285714;
+const PX_PER_CM = 5.4285714;
 
 interface AdjustmentData {
     id: number;
