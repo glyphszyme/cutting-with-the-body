@@ -28,7 +28,7 @@ const TEXT_CONTENT = {
 const TEST_DATA = {
     bodyHeight: 178,
     shoulderWidth: 50,
-    bodyParts: ["palm", "leg", "thigh"]
+    bodyParts: ["finger", "leg", "thigh"]
 };
 
 export default function ShowPage() {
