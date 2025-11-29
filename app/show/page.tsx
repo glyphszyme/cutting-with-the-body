@@ -7,16 +7,8 @@ import { buildBodyPartsString } from "@/lib/textUtils";
 // ===== 보정 상수 =====
 // 프로젝터 캘리브레이션 후 아래 값들을 조정하세요
 
-// 1. 실제 매트 크기 (cm)
-const MAT_WIDTH_CM = 60;   // 가로
-const MAT_HEIGHT_CM = 180; // 세로
-
-// 2. 픽셀/cm 비율 (프로젝터 투사 후 자로 측정하여 조정)
-const PX_PER_CM = 10;
-
-// 3. 계산된 container 크기 (px) - 실제 매트에 대응
-const CONTAINER_WIDTH_PX = MAT_WIDTH_CM * PX_PER_CM;   // 600px
-const CONTAINER_HEIGHT_PX = MAT_HEIGHT_CM * PX_PER_CM; // 1800px
+// 픽셀/cm 비율 (프로젝터 투사 후 자로 측정하여 조정)
+const PX_PER_CM = 9.5;
 
 interface AdjustmentData {
     id: number;
@@ -96,7 +88,7 @@ export default function ShowPage() {
         const bodyPartsText = buildBodyPartsString(TEST_DATA.bodyParts);
         const fullText = TEXT_CONTENT.prefix + bodyPartsText + TEXT_CONTENT.main;
         const maxChars = width * height;
-        return fullText.substring(0, maxChars);
+        return fullText.repeat(10).substring(0, maxChars);
     }, [width, height]);
 
     // 실제 물리적 크기 (픽셀로 변환)
@@ -110,62 +102,52 @@ export default function ShowPage() {
 
     if (loading) {
         return (
-            <div className="container" style={{
-                width: `${CONTAINER_WIDTH_PX}px`,
-                height: `${CONTAINER_HEIGHT_PX}px`
-            }}>
-                <div className="frame">
-                    <div style={{ 
-                        display: 'flex', 
-                        alignItems: 'center', 
-                        justifyContent: 'center',
-                        height: '100%',
-                        fontSize: '24px'
-                    }}>
-                        로딩 중...
-                    </div>
+            <div className="frame">
+                <div style={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'center',
+                    padding: '50px',
+                    fontSize: '24px'
+                }}>
+                    로딩 중...
                 </div>
             </div>
         );
     }
 
     return (
-        // 60cm × 180cm 실제 매트
-        <div className="container" style={{
-            width: `${CONTAINER_WIDTH_PX}px`,
-            height: `${CONTAINER_HEIGHT_PX}px`
-        }}>
-            <div className="frame">
-                <div className="crop-mark-top-left" />
-                <div className="crop-mark-top-center" />
-                <div className="crop-mark-top-right" />
-                <div className="crop-mark-midle-left" />
-                <div className="crop-mark-midle-right" />
-                <div className="crop-mark-bottom-left" />
-                <div className="crop-mark-bottom-center" />
-                <div className="crop-mark-bottom-right" />
-                <div 
-                    className="text-grid-container"
-                    style={{
-                        display: 'grid',
-                        gridTemplateColumns: `repeat(${width}, 1fr)`,
-                        gridTemplateRows: `repeat(${height}, 1fr)`,
-                        width: `${W_show_px}px`,
-                        height: `${H_show_px}px`
-                    }}
-                >
-                    {displayText.split('').map((char, index) => (
-                        <div key={index} style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            fontSize: `${fontSize}px`,
-                            overflow: 'hidden',
-                        }}>
-                            {char}
-                        </div>
-                    ))}
-                </div>
+        <div className="frame">
+            <div className="crop-mark-top-left" />
+            <div className="crop-mark-top-center" />
+            <div className="crop-mark-top-right" />
+            <div className="crop-mark-middle-left" />
+            <div className="crop-mark-middle-right" />
+            <div className="crop-mark-bottom-left" />
+            <div className="crop-mark-bottom-center" />
+            <div className="crop-mark-bottom-right" />
+            <div 
+                className="text-grid-container"
+                style={{
+                    gridTemplateColumns: `repeat(${width}, 1fr)`,
+                    gridTemplateRows: `repeat(${height}, 1fr)`,
+                    width: `${W_show_px}px`,
+                    height: `${H_show_px}px`
+                }}
+            >
+                {displayText.split('').map((char, index) => (
+                    <div key={index} style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: `${fontSize}px`,
+                        overflow: 'hidden',
+                        border: '1px solid green',
+                        boxSizing: 'border-box',
+                    }}>
+                        {char}
+                    </div>
+                ))}
             </div>
         </div>
     );

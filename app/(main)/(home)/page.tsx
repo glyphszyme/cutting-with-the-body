@@ -71,7 +71,7 @@ export default function HomePage() {
                 </div>
                 
                 <Image
-                    src="/images/standing_original.png" 
+                    src="/images/standing_original.webp" 
                     alt="재단선 예시"
                     width={393} 
                     height={852} 
@@ -101,8 +101,9 @@ export default function HomePage() {
                                 pointerEvents: 'none',
                                 zIndex: 100,
                                 textDecoration: 'underline',
-                                mixBlendMode: 'difference',
-                                color: '#ffffff',
+                                // mixBlendMode: 'difference',
+                                // color: '#ffffff',
+                                color: 'var(--color-text)',
                                 letterSpacing: '4px',
                             }}
                         >

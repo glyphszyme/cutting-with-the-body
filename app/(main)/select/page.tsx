@@ -117,7 +117,7 @@ export default function SelectPage() {
                 }}>
                     {/* 배경 이미지 (액자) */}
                     <img
-                        src="/images/bg.png"
+                        src="/images/bg.webp"
                         alt="background frame"
                         style={{
                             width: '100%',
@@ -128,12 +128,11 @@ export default function SelectPage() {
                             // border: '1px solid red',
                         }}
                     />
-                    
                     {/* 클릭 가능한 이미지들 - bg에 대한 absolute 위치 */}
                     {imagePositions.map((image) => (
                         <img
                             key={image.id}
-                            src={`/images/${image.id}.png`} 
+                            src={`/images/${image.id}.webp`} 
                             alt={image.name}
                             onClick={(e) => handleImageClick(e, image.id)}
                             style={{

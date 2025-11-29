@@ -56,9 +56,9 @@ function FrameContent({ children }: FrameProps) {
 }
 
 // Provider로 감싸서 각 페이지에서 useSetFrameLinks로 링크 설정 가능
-export default function Frame({ children }: FrameProps) {
+export default function Frame({ children, initialLinks = [] }: FrameProps & { initialLinks?: any }) {
     return (
-        <FrameLinksProvider>
+        <FrameLinksProvider initialLinks={initialLinks}>
             <FrameContent>{children}</FrameContent>
         </FrameLinksProvider>
     );

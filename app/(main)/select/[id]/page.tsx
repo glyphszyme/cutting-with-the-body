@@ -50,7 +50,7 @@ export default function PoseDetailPage() {
                 </div>
 
                 <img
-                    src={`/images/${pose.id}_bg.png`} alt={pose.name} style={{
+                    src={`/images/${pose.id}_bg.`} alt={pose.name} style={{
                         width: '100%',
                         height: 'auto',
                     }}

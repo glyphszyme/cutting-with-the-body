@@ -16,8 +16,8 @@ interface FrameLinksContextType {
 
 const FrameLinksContext = createContext<FrameLinksContextType | undefined>(undefined);
 
-export function FrameLinksProvider({ children }: { children: ReactNode }) {
-    const [links, setLinks] = useState<FrameLink[]>([]);
+export function FrameLinksProvider({ children, initialLinks = [] }: { children: ReactNode, initialLinks?: FrameLink[] }) {
+    const [links, setLinks] = useState<FrameLink[]>(initialLinks);
 
     return (
         <FrameLinksContext.Provider value={{ links, setLinks }}>

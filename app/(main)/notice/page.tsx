@@ -119,7 +119,7 @@ export default function NoticePage() {
                                 </svg>
                                 
                                 {/* hand 이미지 - 그리드보다 작게 */}
-                                <img src="/images/hand.png" alt="" style={{
+                                <img src="/images/hand.webp" alt="" style={{
                                     position: 'relative',
                                     width: '50px', 
                                     height: '50px',

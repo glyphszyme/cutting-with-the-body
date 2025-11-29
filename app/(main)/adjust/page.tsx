@@ -5,7 +5,10 @@ import { useRouter } from "next/navigation";
 import { useSetFrameLinks } from "@/hooks/useSetFrameLinks";
 import { bodyPartGroups } from "@/data/bodyParts";
 import { supabase } from "@/lib/supabase";
-import { generateGridSequence, findInitialStepIndex, type GridStep } from "@/lib/gridSequence";
+import { generateGridSequence, findInitialStepIndex, calculateCorrectedGrid, type GridStep } from "@/lib/gridSequence";
+
+// ===== 사각형 표시 설정 =====
+// 사각형 크기 제한 없이 순수 비율로만 표시
 
 interface SubmissionData {
     bodyHeight: number;
@@ -95,8 +98,16 @@ export default function AdjustPage() {
             );
             setGridSequence(sequence);
 
-            // 초기 인덱스 찾기
-            const initialIndex = findInitialStepIndex(sequence, submissionData.initialWidth, submissionData.initialHeight);
+            // 보정된 w, h 계산
+            const { correctedW, correctedH } = calculateCorrectedGrid(
+                submissionData.bodyHeight,
+                submissionData.shoulderWidth,
+                submissionData.initialWidth,
+                submissionData.initialHeight
+            );
+
+            // 초기 인덱스 찾기 (보정된 값 사용)
+            const initialIndex = findInitialStepIndex(sequence, correctedW, correctedH);
             setStepIndex(initialIndex);
             setTouchStartIndex(initialIndex);
 
@@ -184,17 +195,11 @@ export default function AdjustPage() {
         }
     };
 
-    // 화면 표시용 크기 계산 (cm → px 변환)
-    const cmToPx = 5; // 5px per cm
-    const maxDisplaySize = 200; // 최대 표시 크기 (px)
-    
-    let displayWidth = currentStep.displayWidth * cmToPx;
-    let displayHeight = currentStep.displayHeight * cmToPx;
-    
-    // 화면에 맞게 스케일 조정
-    const scale = Math.min(1, maxDisplaySize / Math.max(displayWidth, displayHeight));
-    displayWidth *= scale;
-    displayHeight *= scale;
+    // 화면 표시용 크기 계산 (비율 유지하며 정규화)
+    // 사각형의 실제 크기를 c * w, c * h로 직접 계산
+    const c = 5; // 원하는 배율로 조정 (예: 2px)
+    let displayWidth = c * currentStep.width;
+    let displayHeight = c * currentStep.height;
 
     const handleTouchStart = (e: React.TouchEvent) => {
         setTouchStartX(e.touches[0].clientX);
@@ -267,25 +272,25 @@ export default function AdjustPage() {
                     재단이 완료되었습니다. 중앙에 생성된 지면 위에서 손가락을 좌우로 움직여 보세요.
                 </div>
 
-                <div className="text" style={{
+                {/* <div className="text" style={{
                     textAlign: 'center',
                     margin: '20px 0',
                 }}>
                     <div>신장: {submissionData.bodyHeight} cm·어깨너비: {submissionData.shoulderWidth} cm</div>
                     <div>■ {getBodyPartsLabels(submissionData.bodyParts).split(", ").join('·')}</div>
-                </div>
+                </div> */}
                 
                 <div style={{
                     position: 'absolute',
-                    top: 'calc(50% + 30px)',
+                    top: 'calc(50% - 10px)',
                     left: '50%',
                     transform: 'translate(-50%, -50%)',
                 }}>
                     {/* 사각형 */}
                     <div
                         style={{
-                            width: `${displayWidth + 10}px`,
-                            height: `${displayHeight + 10}px`,
+                            width: `${displayWidth}px`,
+                            height: `${displayHeight}px`,
                             border: '2px solid var(--color-bg)',
                             cursor: 'ew-resize',
                             touchAction: 'none',

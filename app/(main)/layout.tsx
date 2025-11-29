@@ -2,6 +2,7 @@ import "../../styles/globals.scss";
 
 import type { Metadata } from "next";
 import Frame from "@/components/Frame";
+import { frameLinksMap } from "../frameLinksConfig";
 
 export const metadata: Metadata = {
     title: "몸으로 재단하기",
@@ -13,6 +14,14 @@ export default function RootLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+    // 경로에 따라 frameLinksMap에서 링크 결정
+    // next/navigation의 usePathname은 클라이언트에서만 동작하므로, 서버에서 pathname을 props로 받아야 함
+    // 여기서는 window.location.pathname을 fallback으로 사용
+    let pathname = '/';
+    if (typeof window !== 'undefined') {
+        pathname = window.location.pathname;
+    }
+    const initialLinks = frameLinksMap[pathname] || [];
     return (
         <html lang="ko">
             <head>
@@ -20,7 +29,7 @@ export default function RootLayout({
             </head>
             <body>
                 <div className="app-container">
-                    <Frame>
+                    <Frame initialLinks={initialLinks}>
                         <div className="content-wrapper">
                             {children}
                         </div>
