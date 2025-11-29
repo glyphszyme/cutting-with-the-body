@@ -18,6 +18,7 @@ interface FormData {
 export default function CutPage() {
     const router = useRouter();
     const [step, setStep] = useState(1);
+    const [errorMessage, setErrorMessage] = useState("");
 
     const [formData, setFormData] = useState<FormData>({
         bodyHeight: "",
@@ -28,12 +29,65 @@ export default function CutPage() {
     });
 
     const handleNext = () => {
+        setErrorMessage(""); // 오류 메시지 초기화
+        
+        // Step별 validation
+        if (step === 1) {
+            const height = parseInt(formData.bodyHeight);
+            const width = parseInt(formData.shoulderWidth);
+            
+            if (!formData.bodyHeight || isNaN(height)) {
+                setErrorMessage('신장을 숫자로 입력해주세요.');
+                return;
+            }
+            if (height <= 0 || height > 300) {
+                setErrorMessage('3m 미만의 신장을 입력해주세요.');
+                return;
+            }
+            
+            if (!formData.shoulderWidth || isNaN(width)) {
+                setErrorMessage('어깨너비를 숫자로 입력해주세요.');
+                return;
+            }
+            if (width <= 0 || width > 100) {
+                setErrorMessage('1m 미만의 어깨너비를 입력해주세요.');
+                return;
+            }
+        } else if (step === 2) {
+            const width = parseInt(formData.width);
+            const height = parseInt(formData.height);
+            
+            if (!formData.width || isNaN(width)) {
+                setErrorMessage('가로 개수를 숫자로 입력해주세요.');
+                return;
+            }
+            if (width <= 0 || width > 30) {
+                setErrorMessage('가로 모듈의 최대 개수는 30개입니다.');
+                return;
+            }
+            
+            if (!formData.height || isNaN(height)) {
+                setErrorMessage('세로 개수를 숫자로 입력해주세요.');
+                return;
+            }
+            if (height <= 0 || height > 90) {
+                setErrorMessage('세로 모듈의 최대 개수는 90개입니다.');
+                return;
+            }
+        } else if (step === 3) {
+            if (formData.bodyParts.length === 0) {
+                setErrorMessage('신체 부위를 선택해주세요.');
+                return;
+            }
+        }
+
         if (step < 4) {
             setStep(step + 1);
         }
     };
 
     const handlePrevious = () => {
+        setErrorMessage(""); // 오류 메시지 초기화
         if (step > 1) {
             setStep(step - 1);
         }
@@ -52,7 +106,7 @@ export default function CutPage() {
             const result = await response.json();
 
             if (result.success) {
-                router.push('/');
+                router.push('/adjust');
             } else {
                 alert("제출에 실패했습니다. 다시 시도해주세요.");
             }
@@ -65,9 +119,7 @@ export default function CutPage() {
     useSetFrameLinks({
         links: [
             { slot: 'left', href: '/', label: '처음으로' },
-            step === 4
-                ? { slot: 'center', onClick: handleSubmit, label: '동의 및 업로드' }
-                : { slot: 'center', onClick: handleNext, label: '다음으로' },
+            ...(step !== 4 ? [{ slot: 'center' as const, onClick: handleNext, label: '다음으로' }] : []),
             step === 1 
                 ? { slot: 'right', href: '/select', label: '뒤로가기' }
                 : { slot: 'right', onClick: handlePrevious, label: '뒤로가기' },
@@ -95,7 +147,7 @@ export default function CutPage() {
                     <div className="step-header">
                         <div className="text">1</div>
                         <div className="text">본인의 신장과 어깨너비를</div>
-                        <div className="text">입력해 주세요.</div>
+                        <div className="text">입력해주세요.</div>
                     </div>
                     
                     <form>
@@ -106,6 +158,8 @@ export default function CutPage() {
                             placeholder="161"
                             unit="cm"
                             onChange={(value) => handleInputChange("bodyHeight", value)}
+                            min={50}
+                            max={250}
                         />
                         
                         <FormInput
@@ -115,11 +169,18 @@ export default function CutPage() {
                             placeholder="40"
                             unit="cm"
                             onChange={(value) => handleInputChange("shoulderWidth", value)}
+                            min={20}
+                            max={100}
                         />
 
                         <div className="step-footer">
                             <div className="text">*신장과 어깨너비를 모르는 경우,</div>
                             <div className="text">아래의 줄자를 이용해주세요.</div>
+                            {errorMessage && (
+                                <div className="text" style={{ marginTop: '30px' }}>
+                                    {errorMessage}
+                                </div>
+                            )}
                         </div>
                     </form>
 
@@ -130,7 +191,7 @@ export default function CutPage() {
                     <div className="step-header">
                         <div className="text">2</div>
                         <div className="text">매트 위에 신체가 닿는 영역의</div>
-                        <div className="text">가로와 세로 모듈 수를 입력해 주세요.</div>
+                        <div className="text">가로와 세로 모듈 수를 입력해주세요.</div>
                     </div>
 
                     <form>
@@ -141,6 +202,8 @@ export default function CutPage() {
                             placeholder="5"
                             unit="개"
                             onChange={(value) => handleInputChange("width", value)}
+                            min={1}
+                            max={30}
                         />
 
                         <FormInput
@@ -150,11 +213,18 @@ export default function CutPage() {
                             placeholder="8"
                             unit="개"
                             onChange={(value) => handleInputChange("height", value)}
+                            min={1}
+                            max={90}
                         />
 
                         <div className="step-footer">
                             <div className="text">*매트 위 네모(ㅁㅁㅁ)는</div>
                             <div className="text">모듈 한 칸을 의미합니다.</div>
+                            {errorMessage && (
+                                <div className="text" style={{ marginTop: '30px' }}>
+                                    {errorMessage}
+                                </div>
+                            )}
                         </div>
                     </form>
 
@@ -176,6 +246,11 @@ export default function CutPage() {
                                 onToggle={handleBodyPartToggle}
                             />
                         </div>
+                        {errorMessage && (
+                            <div className="text" style={{ marginTop: '30px', textAlign: 'center' }}>
+                                {errorMessage}
+                            </div>
+                        )}
                     </form>
                 </>)}
 
@@ -186,6 +261,30 @@ export default function CutPage() {
                         <div className="text">입력하신 정보는 이후 연구 및</div>
                         <div className="text">아카이브 작업에 활용됩니다.</div>
                         <div className="text">이에 동의하시나요?</div>
+                    </div>
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        marginTop: '40px'
+                    }}>
+                        <button 
+                            onClick={handleSubmit}
+                            className="text"
+                            style={{
+                                position: 'absolute',
+                                top: 'calc(50% + 60px)',
+                                transform: 'translateY(-50%)',
+                                padding: '15px 30px 12px',
+                                background: 'var(--color-text)',
+                                color: 'var(--color-bg)',
+                                border: 'none',
+                                cursor: 'pointer',
+                                fontSize: 'var(--font-size-large)',
+                                fontFamily: 'inherit',
+                            }}
+                        >
+                            동의 및 업로드
+                        </button>
                     </div>
                 </>)}
             </main>

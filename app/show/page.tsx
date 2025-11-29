@@ -2,12 +2,28 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { supabase } from "@/lib/supabase";
-import { buildBodyPartsString, calculateDisplaySize } from "@/lib/textUtils";
+import { buildBodyPartsString } from "@/lib/textUtils";
+
+// ===== 보정 상수 =====
+// 프로젝터 캘리브레이션 후 아래 값들을 조정하세요
+
+// 1. 실제 매트 크기 (cm)
+const MAT_WIDTH_CM = 60;   // 가로
+const MAT_HEIGHT_CM = 180; // 세로
+
+// 2. 픽셀/cm 비율 (프로젝터 투사 후 자로 측정하여 조정)
+const PX_PER_CM = 10;
+
+// 3. 계산된 container 크기 (px) - 실제 매트에 대응
+const CONTAINER_WIDTH_PX = MAT_WIDTH_CM * PX_PER_CM;   // 600px
+const CONTAINER_HEIGHT_PX = MAT_HEIGHT_CM * PX_PER_CM; // 1800px
 
 interface AdjustmentData {
     id: number;
     width: number;
     height: number;
+    display_width: number;
+    display_height: number;
     user_id: string;
     updated_at: string;
 }
@@ -26,6 +42,8 @@ const TEST_DATA = {
 export default function ShowPage() {
     const [width, setWidth] = useState(0);
     const [height, setHeight] = useState(0);
+    const [displayWidth, setDisplayWidth] = useState(0); // cm 단위
+    const [displayHeight, setDisplayHeight] = useState(0); // cm 단위
     const [loading, setLoading] = useState(true);
 
     // 초기 데이터 가져오기
@@ -42,6 +60,8 @@ export default function ShowPage() {
             } else if (data) {
                 setWidth(data.width);
                 setHeight(data.height);
+                setDisplayWidth(data.display_width || 0);
+                setDisplayHeight(data.display_height || 0);
             }
             setLoading(false);
         };
@@ -60,6 +80,8 @@ export default function ShowPage() {
                     const newData = payload.new as AdjustmentData;
                     setWidth(newData.width);
                     setHeight(newData.height);
+                    setDisplayWidth(newData.display_width || 0);
+                    setDisplayHeight(newData.display_height || 0);
                 }
             )
             .subscribe();
@@ -77,27 +99,42 @@ export default function ShowPage() {
         return fullText.substring(0, maxChars);
     }, [width, height]);
 
-    // 표시 크기 계산 (메모이제이션)
-    const { W_show_px, H_show_px } = useMemo(() => 
-        calculateDisplaySize(
-            TEST_DATA.bodyHeight,
-            TEST_DATA.shoulderWidth,
-            width,
-            height,
-            2, // CHAR_SIZE_CM
-            0.1 // cmToPx
-        ),
-        [width, height]
-    );
+    // 실제 물리적 크기 (픽셀로 변환)
+    const W_show_px = displayWidth * PX_PER_CM;
+    const H_show_px = displayHeight * PX_PER_CM;
 
-    // 글자 크기 계산
-    const charWidthPx = W_show_px / width;
-    const charHeightPx = H_show_px / height;
+    // 글자 크기 계산 (한 셀당 크기)
+    const charWidthPx = width > 0 ? W_show_px / width : 0;
+    const charHeightPx = height > 0 ? H_show_px / height : 0;
     const fontSize = Math.min(charWidthPx, charHeightPx) * 0.8;
 
+    if (loading) {
+        return (
+            <div className="container" style={{
+                width: `${CONTAINER_WIDTH_PX}px`,
+                height: `${CONTAINER_HEIGHT_PX}px`
+            }}>
+                <div className="frame">
+                    <div style={{ 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        justifyContent: 'center',
+                        height: '100%',
+                        fontSize: '24px'
+                    }}>
+                        로딩 중...
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     return (
-        // 180cm * 60cm 실제 매트
-        <div className="container">
+        // 60cm × 180cm 실제 매트
+        <div className="container" style={{
+            width: `${CONTAINER_WIDTH_PX}px`,
+            height: `${CONTAINER_HEIGHT_PX}px`
+        }}>
             <div className="frame">
                 <div className="crop-mark-top-left" />
                 <div className="crop-mark-top-center" />
@@ -113,6 +150,8 @@ export default function ShowPage() {
                         display: 'grid',
                         gridTemplateColumns: `repeat(${width}, 1fr)`,
                         gridTemplateRows: `repeat(${height}, 1fr)`,
+                        width: `${W_show_px}px`,
+                        height: `${H_show_px}px`
                     }}
                 >
                     {displayText.split('').map((char, index) => (

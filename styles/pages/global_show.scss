@@ -55,8 +55,7 @@ li {
     justify-content: center;
 
     .container {
-        width: 33vh;
-        height: 99vh;
+        // 크기는 inline style로 동적 설정 (PX_PER_CM * MAT_SIZE)
         border: 1px solid red;
         overflow: hidden;
         

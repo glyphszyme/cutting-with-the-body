@@ -6,6 +6,8 @@ interface FormInputProps {
     unit: string;
     onChange: (value: string) => void;
     required?: boolean;
+    min?: number;
+    max?: number;
 }
 
 export default function FormInput({
@@ -16,6 +18,8 @@ export default function FormInput({
     unit,
     onChange,
     required = true,
+    min,
+    max,
 }: FormInputProps) {
     return (
         <div className="form-input-container  text text--large" style={{
@@ -37,6 +41,8 @@ export default function FormInput({
                 onChange={(e) => onChange(e.target.value)}
                 placeholder={placeholder}
                 required={required}
+                min={min}
+                max={max}
             />
             <label htmlFor={id} className="form-input-label-right">
                 {unit}

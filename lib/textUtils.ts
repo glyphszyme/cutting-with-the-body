@@ -36,9 +36,23 @@ export const calculateDisplaySize = (
     charSizeCm: number = 2,
     cmToPx: number = 0.5
 ) => {
+    const MAX_WIDTH_CM = 180;
+    const MAX_HEIGHT_CM = 60;
+
     const bodyFactor = Math.sqrt(bodyHeight * shoulderWidth);
-    const W_show_cm = bodyFactor * charSizeCm * width;
-    const H_show_cm = bodyFactor * charSizeCm * height;
+    let W_show_cm = bodyFactor * charSizeCm * width;
+    let H_show_cm = bodyFactor * charSizeCm * height;
+
+    // 격자판 초과 방지: 스케일 축소
+    const scale = Math.min(
+        1,
+        MAX_WIDTH_CM / W_show_cm,
+        MAX_HEIGHT_CM / H_show_cm
+    );
+
+    W_show_cm *= scale;
+    H_show_cm *= scale;
+
     const W_show_px = Math.round(W_show_cm * cmToPx);
     const H_show_px = Math.round(H_show_cm * cmToPx);
 
