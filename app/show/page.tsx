@@ -110,7 +110,7 @@ export default function ShowPage() {
                     padding: '50px',
                     fontSize: '24px'
                 }}>
-                    로딩 중...
+                    로딩 중....
                 </div>
             </div>
         );
