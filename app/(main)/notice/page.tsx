@@ -8,7 +8,7 @@ export default function NoticePage() {
     useSetFrameLinks({
         links: [
             { slot: 'left', href: '/', label: '처음으로' },
-            { slot: 'center', href: '/select', label: '재단하기' },
+            { slot: 'center', href: 'cut', label: '재단하기' },
             { slot: 'right', href: '/select', label: '뒤로가기' },
         ]
     });

@@ -35,7 +35,9 @@ export default function FormInput({
                 </label>
             <input
                 className="text text--large"
-                type="number"
+                // type="number"
+                type="text"
+                inputMode="numeric"
                 id={id}
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
