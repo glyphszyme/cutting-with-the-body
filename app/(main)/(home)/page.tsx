@@ -88,7 +88,8 @@ export default function HomePage() {
                 />
 
                 {/* Portal로 body에 직접 렌더링 */}
-                {mounted && createPortal(
+                {/* {mounted && createPortal( */}
+                {createPortal(
                     lines.map((line) => (
                         <div
                             key={line.id}
