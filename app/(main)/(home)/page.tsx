@@ -13,8 +13,7 @@ interface TextLine {
     text: string;
 }
 
-// const LONG_TEXT = `${Array(4).fill("CUTTING WITH THE BODY 몸으로 재단하기").join(" ")}`;
-const LONG_TEXT = "CUT";
+const LONG_TEXT = `${Array(1).fill("CUTTING WITH THE BODY 몸으로 재단하기").join(" ")}`;
 const ROTATIONS = [-45, 0, 45, 90]; // 수평, 우상향 45도, 수직, 좌상향 45도
 const MAX_LINES = 4; // 최대 4개의 선만 표시
 
@@ -90,10 +89,10 @@ export default function HomePage() {
                 {/* Portal로 body에 직접 렌더링 */}
                 <div className="text-lines-container" style={{
                     position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
+                    top: '10dvh',
+                    left: '10dvw',
+                    width: '80dvw',
+                    height: '80dvh',
                     pointerEvents: 'none',
                 }}>
                     {mounted && createPortal(
@@ -112,7 +111,7 @@ export default function HomePage() {
                                     textDecoration: 'underline',
                                     color: 'var(--color-text)',
                                     letterSpacing: '4px',
-                                    fontSize: 'var(--font-size-base) !important',
+                                    // mixBlendMode: 'difference',
                                 }}
                             >
                                 {line.text}
