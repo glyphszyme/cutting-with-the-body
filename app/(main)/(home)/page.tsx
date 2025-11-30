@@ -96,7 +96,7 @@ export default function HomePage() {
                                 position: 'fixed',
                                 left: `${line.x}px`,
                                 top: `${line.y}px`,
-                                transform: `translate(-50%, -50%) rotate(${line.rotation}deg)`,
+                                // transform: `translate(-50%, -50%) rotate(${line.rotation}deg)`,
                                 whiteSpace: 'nowrap',
                                 pointerEvents: 'none',
                                 zIndex: 100,
