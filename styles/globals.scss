@@ -39,6 +39,8 @@ body {
     background-color: var(--color-bg);
     color: var(--color-text);
     -webkit-font-smoothing: antialiased;
+    width: 100dvw;
+    height: 100dvh;
     
     // 스크롤 제거
     overflow: hidden;

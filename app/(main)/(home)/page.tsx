@@ -13,7 +13,7 @@ interface TextLine {
     text: string;
 }
 
-const LONG_TEXT = `${Array(1).fill("CUTTING WITH THE BODY 몸으로 재단하기").join(" ")}`;
+const LONG_TEXT = `${Array(4).fill("CUTTING WITH THE BODY 몸으로 재단하기").join(" ")}`;
 const ROTATIONS = [-45, 0, 45, 90]; // 수평, 우상향 45도, 수직, 좌상향 45도
 const MAX_LINES = 4; // 최대 4개의 선만 표시
 
