@@ -8,7 +8,8 @@ import { buildBodyPartsString } from "@/lib/textUtils";
 // 프로젝터 캘리브레이션 후 아래 값들을 조정하세요
 
 // 픽셀/cm 비율 (프로젝터 투사 후 자로 측정하여 조정)
-const PX_PER_CM = 21.37232;
+const PX_PER_CM_H = 21.37232;
+const PX_PER_CM_W = 21.37232;
 
 interface AdjustmentData {
     id: number;
@@ -92,8 +93,8 @@ export default function ShowPage() {
     }, [width, height]);
 
     // 실제 물리적 크기 (픽셀로 변환)
-    const W_show_px = displayWidth * PX_PER_CM;
-    const H_show_px = displayHeight * PX_PER_CM;
+    const W_show_px = displayWidth * PX_PER_CM_W;
+    const H_show_px = displayHeight * PX_PER_CM_H;
 
     // 글자 크기 계산 (한 셀당 크기)
     const charWidthPx = width > 0 ? W_show_px / width : 0;
@@ -117,7 +118,10 @@ export default function ShowPage() {
     }
 
     return (
-        <div className="frame">
+        <div className="frame" style={{
+            left: `${charWidthPx/2 * (width % 2)}px`,
+            top: `${charHeightPx/2 * (height % 2)}px`
+        }}>
             <div className="crop-mark-top-left" />
             <div className="crop-mark-top-center" />
             <div className="crop-mark-top-right" />
