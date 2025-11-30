@@ -78,7 +78,8 @@ li {
 
 // Crop mark 위치별 스타일
 .crop-mark {
-    $border: 1px solid var(--color-text);
+    // $border: 1px solid var(--color-text);
+    $border: 1px solid red;
     
     &-top-left {
         top: 0;
