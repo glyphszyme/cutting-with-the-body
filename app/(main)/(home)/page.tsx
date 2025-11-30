@@ -87,32 +87,40 @@ export default function HomePage() {
                 />
 
                 {/* Portal로 body에 직접 렌더링 */}
-                {mounted && createPortal(
-                    lines.map((line) => (
-                        <div
-                            key={line.id}
-                            className="text"
-                            style={{
-                                position: 'fixed',
-                                left: `${line.x}px`,
-                                top: `${line.y}px`,
-                                // transform: `translate(-50%, -50%) rotate(${line.rotation}deg)`,
-                                whiteSpace: 'nowrap',
-                                pointerEvents: 'none',
-                                zIndex: 100,
-                                textDecoration: 'underline',
-                                // mixBlendMode: 'difference',
-                                // color: '#ffffff',
-                                color: 'var(--color-text)',
-                                letterSpacing: '4px',
-                                fontSize: 'var(--font-size-base) !important',
-                            }}
-                        >
-                            {line.text}
-                        </div>
-                    )),
-                    document.body
-                )}
+                <div className="text-lines-container" style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    pointerEvents: 'none',
+                }}>
+                    {mounted && createPortal(
+                        lines.map((line) => (
+                            <div
+                                key={line.id}
+                                className="text"
+                                style={{
+                                    // position: 'fixed',
+                                    position: 'absolute',
+                                    left: `${line.x}px`,
+                                    top: `${line.y}px`,
+                                    transform: `translate(-50%, -50%) rotate(${line.rotation}deg)`,
+                                    whiteSpace: 'nowrap',
+                                    pointerEvents: 'none',
+                                    zIndex: 100,
+                                    textDecoration: 'underline',
+                                    color: 'var(--color-text)',
+                                    letterSpacing: '4px',
+                                    fontSize: 'var(--font-size-base) !important',
+                                }}
+                            >
+                                {line.text}
+                            </div>
+                        )),
+                        document.body
+                    )}
+                </div>
             </main>
         </div>
     );
