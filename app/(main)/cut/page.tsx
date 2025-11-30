@@ -27,9 +27,15 @@ export default function CutPage() {
         height: "",
         bodyParts: [],
     });
-
+;
     const handleNext = () => {
-        setErrorMessage(""); // 오류 메시지 초기화
+        const initialErrorMessage = (
+            step === 1 ? "신장과 어깨너비를 모르는 경우, 아래의 줄자를 이용해주세요"
+            : step === 2 ? "가로와 세로 모듈 수를 모르는 경우, 매트 위 네모(■■■)를 참고해주세요"
+            : step === 3 ? "신체 부위를 선택해주세요."
+            : ""
+        );
+        setErrorMessage(initialErrorMessage);
         
         // Step별 validation
         if (step === 1) {
@@ -150,7 +156,7 @@ export default function CutPage() {
                         <div className="text">입력해주세요.</div>
                     </div>
                     
-                    <form>
+                    <form className="step-main">
                         <FormInput
                             id="bodyHeight"
                             label="신장"
@@ -172,18 +178,13 @@ export default function CutPage() {
                             min={20}
                             max={100}
                         />
-
-                        <div className="step-footer">
-                            <div className="text">*신장과 어깨너비를 모르는 경우,</div>
-                            <div className="text">아래의 줄자를 이용해주세요.</div>
-                            {errorMessage && (
-                                <div className="text" style={{ marginTop: '30px' }}>
-                                    {errorMessage}
-                                </div>
-                            )}
-                        </div>
                     </form>
 
+                    <div className="step-footer">
+                        <div className="text">
+                            {errorMessage}
+                        </div>
+                    </div>
                 </>)}
 
                 {/* Step 2: 가로/세로 */}
@@ -194,7 +195,7 @@ export default function CutPage() {
                         <div className="text">가로와 세로 모듈 수를 입력해주세요.</div>
                     </div>
 
-                    <form>
+                    <form className="step-main">
                         <FormInput
                             id="width"
                             label="가로"
@@ -216,17 +217,13 @@ export default function CutPage() {
                             min={1}
                             max={90}
                         />
-
-                        <div className="step-footer">
-                            <div className="text">*매트 위 네모(ㅁㅁㅁ)는</div>
-                            <div className="text">모듈 한 칸을 의미합니다.</div>
-                            {errorMessage && (
-                                <div className="text" style={{ marginTop: '30px' }}>
-                                    {errorMessage}
-                                </div>
-                            )}
-                        </div>
                     </form>
+
+                    <div className="step-footer">
+                        <div className="text">
+                            {errorMessage}
+                        </div>
+                    </div>
 
                 </>)}
 
@@ -238,7 +235,7 @@ export default function CutPage() {
                         <div className="text">골라주세요.</div>
                     </div>
                 
-                    <form>
+                    <form className="step-main">
                         <div className="form-group">
                             <BodyPartSelector
                                 groups={bodyPartGroups}
@@ -246,12 +243,14 @@ export default function CutPage() {
                                 onToggle={handleBodyPartToggle}
                             />
                         </div>
-                        {errorMessage && (
-                            <div className="text" style={{ marginTop: '30px', textAlign: 'center' }}>
-                                {errorMessage}
-                            </div>
-                        )}
+                        <br />
                     </form>
+
+                    <div className="step-footer">
+                        <div className="text">
+                            {errorMessage}
+                        </div>
+                    </div>
                 </>)}
 
                 {/* Step 4: 제출 동의 */}
@@ -262,6 +261,7 @@ export default function CutPage() {
                         <div className="text">아카이브 작업에 활용됩니다.</div>
                         <div className="text">이에 동의하시나요?</div>
                     </div>
+                    
                     <div style={{
                         display: 'flex',
                         justifyContent: 'center',

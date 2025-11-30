@@ -268,18 +268,12 @@ export default function AdjustPage() {
     return (
         <div className="container">
             <main>
-                <div className="text">
-                    재단이 완료되었습니다. 중앙에 생성된 지면 위에서 손가락을 좌우로 움직여 보세요.
+                <div className="step-header">
+                    <div className="text">
+                        재단이 완료되었습니다. 중앙에 생성된 지면 위에서 손가락을 좌우로 움직여 보세요.
+                    </div>
                 </div>
 
-                {/* <div className="text" style={{
-                    textAlign: 'center',
-                    margin: '20px 0',
-                }}>
-                    <div>신장: {submissionData.bodyHeight} cm·어깨너비: {submissionData.shoulderWidth} cm</div>
-                    <div>■ {getBodyPartsLabels(submissionData.bodyParts).split(", ").join('·')}</div>
-                </div> */}
-                
                 <div style={{
                     position: 'absolute',
                     top: 'calc(50% - 10px)',
@@ -327,13 +321,11 @@ export default function AdjustPage() {
                         {currentStep.width}
                     </div>
                 </div>
-                <div className="text" style={{
-                    position: 'absolute',
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    bottom: '60px',
+
+                <div className="step-footer" style={{
+                    textAlign: 'center',
                 }}>
-                    <div>{new Date(submissionData.createdAt).toLocaleTimeString('ko-KR', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })}</div>
+                    <div>{new Date(submissionData.createdAt).toLocaleTimeString('ko-KR', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })} 업로드</div>
                     <div>{isConnected ? '연결됨' : '연결끊김'}</div>
                 </div>
             </main>

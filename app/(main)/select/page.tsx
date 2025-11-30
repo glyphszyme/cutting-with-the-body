@@ -109,7 +109,7 @@ export default function SelectPage() {
                 {/* 프레임과 이미지 그룹 */}
                 <div className="image-frame" style={{
                     position: 'absolute',
-                    top: 'calc(50% + 40px)',
+                    top: 'calc(50% + 30px)',
                     left: '50%',
                     transform: 'translate(-50%, -50%)',
                     width: '100%',

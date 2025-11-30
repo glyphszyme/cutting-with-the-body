@@ -16,6 +16,7 @@
     .form-input-label-left {
         position: absolute;
         left: calc(var(--padding-outer) * 2);
+        line-height: 1.4;
     }
     
     input[type="number"] {
@@ -55,11 +56,18 @@
 
 // StepHeader 스타일
 .step-header {
-    margin-top: 50px;
-    margin-bottom: 50px;
+    margin-top: 0px;
+}
+.step-main {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
 }
 .step-footer {
-    margin-top: 50px;
+    position: absolute;
+    bottom: 80px;
+    width: 100%;
 }
 
 // 기존 form-group 스타일 (다른 곳에서 사용 중일 수 있음)
@@ -105,14 +113,14 @@
 .body-parts-container {
     display: flex;
     flex-direction: column;
-    gap: 30px; // 대분류(major-group) 간 간격
+    gap: 17px; // 대분류(major-group) 간 간격
     width: 100%;
 }
 
 .major-group {
     display: flex;
     flex-direction: column;
-    gap: 15px; // 소분류(body-part-group) 간 간격 - 2줄 사이
+    gap: 10px; // 소분류(body-part-group) 간 간격 - 2줄 사이
 }
 
 .body-part-group {
@@ -120,26 +128,28 @@
 }
 
 .body-part-button {
-    width: calc((100% - 51px) / 4);
-    height: 28px;
-    font-size: 14px;
+    width: calc((100% - 15px) / 4);
+    height: 26px;
+    font-size: 13px;
     font-family: inherit;
-    background: white;
-    border: 1px solid var(--color-text);
+
+    background: var(--color-bg);
     color: var(--color-text);
+    border: 1px solid var(--color-text);
     cursor: pointer;
     
     // 선택된 상태 - 원하는 대로 수정하세요
     &.selected {
         background: var(--color-text);
-        color: var(--color-background);
+        color: var(--color-bg);
     }
 }
 
 .checkbox-group {
     display: flex;
     flex-wrap: wrap;
-    gap: 15px 17px;
+    // gap: 15px 12px;
+    gap: 5px;;
     justify-content: left;
 }
 

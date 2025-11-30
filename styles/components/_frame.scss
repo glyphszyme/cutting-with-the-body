@@ -88,7 +88,7 @@
     
     &-left {
         left: calc(25% + var(--crop-mark-length) / 2);
-        bottom: -8px;
+        bottom: -6px;
     }
     
     &-center {
@@ -98,7 +98,7 @@
     
     &-right {
         left: calc(75% - var(--crop-mark-length) / 2);
-        bottom: -8px;
+        bottom: -6px;
     }
 }
 
@@ -112,7 +112,7 @@
     line-height: var(--line-height-base);
     text-decoration: underline;
     color: var(--color-text);
-    background: white;
+    // background: white;
     border: none;
     padding: 0;
     cursor: pointer;

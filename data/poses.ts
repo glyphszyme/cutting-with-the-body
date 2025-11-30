@@ -17,7 +17,7 @@ export const poses: Pose[] = [
         id: 'anjaneyasana',
         name: '안자니아사나',
         target_area: ['무릎', '발바닥', '손끝', '정강이', '발등'],
-        description: '한쪽 발바닥은 매트 앞쪽, 반대 무릎은 매트 뒤쪽에 둔다. 골반을 열고 손끝으로바닥을 짚는다.'
+        description: '한쪽 발바닥은 매트 앞쪽, 반대 무릎은 매트 뒤쪽에 둔다. 골반을 열고 손끝으로 바닥을 짚는다.'
     },
     {
         id: 'balasana',

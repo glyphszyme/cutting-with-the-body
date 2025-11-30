@@ -45,19 +45,26 @@ export default function PoseDetailPage() {
                     borderBottom: '1px solid var(--color-text)',
                     margin: '10px auto',
                     padding: '10px 0',
+                    zIndex: 100,
                 }}>
                     ■ {pose.target_area.join('·')}
                 </div>
 
-                <img
-                    src={`/images/${pose.id}_bg.`} alt={pose.name} style={{
-                        width: '100%',
-                        height: 'auto',
-                    }}
-                />
-
-                <div className="text">
-                    {pose.description}
+                <div style={{
+                    position: 'absolute',
+                    top: 'calc(50% + 30px)',
+                    transform: 'translateY(-50%)',
+                    textAlign: 'center',
+                }}>
+                    <img
+                        src={`/images/${pose.id}.webp`} alt={pose.name} style={{
+                            width: '50%',
+                            height: 'auto',
+                        }}
+                        />
+                    <div className="text">
+                        {pose.description}
+                    </div>
                 </div>
             </main>
         </div>

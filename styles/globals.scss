@@ -50,6 +50,8 @@ body {
 .app-container {
     padding: var(--padding-outer);
     width: 100dvw;
+    max-width: 768px;
+    margin: auto;
     height: 100dvh;
     overflow: hidden;
 }
@@ -63,7 +65,7 @@ body {
     // height: 100%;
     margin: var(--crop-mark-length);
     // margin: 0;
-    padding: var(--padding-inner);
+    padding: var(--padding-inner) 0;
     z-index: 1;
     overflow: hidden;
 }

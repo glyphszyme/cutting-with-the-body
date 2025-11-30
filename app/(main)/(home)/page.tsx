@@ -79,7 +79,7 @@ export default function HomePage() {
                         width: '100%',
                         height: 'auto',
                         position: 'absolute',
-                        top: 'calc(50% + 10px)',
+                        top: 'calc(50% + 40px)',
                         left: '50%',
                         transform: 'translate(-50%, -50%)',
                         zIndex: -1,
@@ -105,6 +105,7 @@ export default function HomePage() {
                                 // color: '#ffffff',
                                 color: 'var(--color-text)',
                                 letterSpacing: '4px',
+                                fontSize: '14px',
                             }}
                         >
                             {line.text}
