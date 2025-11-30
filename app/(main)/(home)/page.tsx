@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+// import { useState, useEffect } from "react";
+import { useState } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import { useSetFrameLinks } from "@/hooks/useSetFrameLinks";
@@ -19,11 +20,11 @@ const MAX_LINES = 4; // 최대 4개의 선만 표시
 
 export default function HomePage() {
     const [lines, setLines] = useState<TextLine[]>([]);
-    const [mounted, setMounted] = useState(false);
+    // const [mounted, setMounted] = useState(false);
 
-    useEffect(() => {
-        setMounted(true);
-    }, []);
+    // useEffect(() => {
+        // setMounted(true);
+    // }, []);
 
     const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
         const rect = e.currentTarget.getBoundingClientRect();
