@@ -35,8 +35,7 @@ export default function FormInput({
                 </label>
             <input
                 className="text text--large"
-                // type="number"
-                type="text"
+                type="number"
                 inputMode="numeric"
                 id={id}
                 value={value}

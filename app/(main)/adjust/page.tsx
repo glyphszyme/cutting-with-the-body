@@ -302,7 +302,7 @@ export default function AdjustPage() {
                     {/* 오른쪽에 height 표시 */}
                     <div className="text" style={{
                         position: 'absolute',
-                        right: `-40px`,
+                        right: `-20px`,
                         top: '50%',
                         transform: 'translateY(-50%)',
                         whiteSpace: 'nowrap',

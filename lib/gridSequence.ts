@@ -3,13 +3,13 @@
 export const BODY_FACTOR_C = 0.01246;
 
 // 매트 크기 제한 (cm)
-const MAX_WIDTH_CM = 60;   // 가로
-const MAX_HEIGHT_CM = 180; // 세로
+const MAX_WIDTH_CM = 50;   // 가로
+const MAX_HEIGHT_CM = 168; // 세로
 
 // 그리드 범위
 const MIN_GRID = 1;
-const MAX_GRID_WIDTH = 30;  // 60cm ÷ 2cm = 30개
-const MAX_GRID_HEIGHT = 90; // 180cm ÷ 2cm = 90개
+const MAX_GRID_WIDTH = 25;  // 50cm ÷ 2cm = 25개
+const MAX_GRID_HEIGHT = 84; // 168cm ÷ 2cm = 84개
 
 // gridAlgorithm import
 import { generateGridCombinations } from './gridAlgorithm';
@@ -33,8 +33,8 @@ export function calculateCorrectedGrid(
     const bodyFactor = Math.sqrt(bodyHeight * shoulderWidth);
     
     // 판형이 판을 넘는지 계수 계산
-    const ratioW = measuredW / MAX_GRID_WIDTH;  // 30을 넘는지
-    const ratioH = measuredH / MAX_GRID_HEIGHT; // 90을 넘는지
+    const ratioW = measuredW / MAX_GRID_WIDTH;  // 25를 넘는지
+    const ratioH = measuredH / MAX_GRID_HEIGHT; // 84를 넘는지
     
     let correctedW: number;
     let correctedH: number;
@@ -51,7 +51,7 @@ export function calculateCorrectedGrid(
         correctedH = measuredH / maxRatio;
     }
     
-    // 최종 범위 클리핑 (2cm 단위로 개수 파악 시 30×90 이내)
+    // 최종 범위 클리핑 (2cm 단위로 개수 파악 시 25×84 이내)
     correctedW = Math.max(MIN_GRID, Math.min(MAX_GRID_WIDTH, Math.round(correctedW)));
     correctedH = Math.max(MIN_GRID, Math.min(MAX_GRID_HEIGHT, Math.round(correctedH)));
 

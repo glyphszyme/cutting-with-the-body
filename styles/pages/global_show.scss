@@ -39,7 +39,7 @@ li {
     --font-family-base: 'SM3GothicStd', system-ui, -apple-system, sans-serif;
     
     // Layout
-    --crop-mark-length: 20px;
+    --crop-mark-length: 15px;
 }
 
 .app-container {
@@ -78,8 +78,8 @@ li {
 
 // Crop mark 위치별 스타일
 .crop-mark {
-    // $border: 1px solid var(--color-text);
-    $border: 1px solid red;
+    $border: 1px solid var(--color-text);
+    // $border: 1px solid red;
     
     &-top-left {
         top: 0;

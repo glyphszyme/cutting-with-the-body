@@ -18,7 +18,7 @@ interface FormData {
 export default function CutPage() {
     const router = useRouter();
     const [step, setStep] = useState(1);
-    const [errorMessage, setErrorMessage] = useState("");
+    const [errorMessage, setErrorMessage] = useState("신장과 어깨너비를 모르는 경우, 아래의 줄자를 이용해주세요.");
 
     const [formData, setFormData] = useState<FormData>({
         bodyHeight: "",
@@ -30,9 +30,8 @@ export default function CutPage() {
 ;
     const handleNext = () => {
         const initialErrorMessage = (
-            step === 1 ? "신장과 어깨너비를 모르는 경우, 아래의 줄자를 이용해주세요"
-            : step === 2 ? "가로와 세로 모듈 수를 모르는 경우, 매트 위 네모(■■■)를 참고해주세요"
-            : step === 3 ? "신체 부위를 선택해주세요."
+            step === 1 ? "가로와 세로 모듈 수를 모르는 경우, 매트 위 네모(■■■)를 참고해주세요."
+            : step === 2 ? "신체 부위를 선택해주세요."
             : ""
         );
         setErrorMessage(initialErrorMessage);
@@ -46,7 +45,7 @@ export default function CutPage() {
                 setErrorMessage('신장을 숫자로 입력해주세요.');
                 return;
             }
-            if (height <= 0 || height > 300) {
+            if (height <= 0 || height >= 300) {
                 setErrorMessage('3m 미만의 신장을 입력해주세요.');
                 return;
             }
@@ -55,7 +54,7 @@ export default function CutPage() {
                 setErrorMessage('어깨너비를 숫자로 입력해주세요.');
                 return;
             }
-            if (width <= 0 || width > 100) {
+            if (width <= 0 || width >= 100) {
                 setErrorMessage('1m 미만의 어깨너비를 입력해주세요.');
                 return;
             }
@@ -67,8 +66,8 @@ export default function CutPage() {
                 setErrorMessage('가로 개수를 숫자로 입력해주세요.');
                 return;
             }
-            if (width <= 0 || width > 30) {
-                setErrorMessage('가로 모듈의 최대 개수는 30개입니다.');
+            if (width <= 0 || width > 25) {
+                setErrorMessage('가로 모듈의 최대 개수는 25개입니다.');
                 return;
             }
             
@@ -76,13 +75,13 @@ export default function CutPage() {
                 setErrorMessage('세로 개수를 숫자로 입력해주세요.');
                 return;
             }
-            if (height <= 0 || height > 90) {
-                setErrorMessage('세로 모듈의 최대 개수는 90개입니다.');
+            if (height <= 0 || height > 84) {
+                setErrorMessage('세로 모듈의 최대 개수는 84개입니다.');
                 return;
             }
         } else if (step === 3) {
             if (formData.bodyParts.length === 0) {
-                setErrorMessage('신체 부위를 선택해주세요.');
+                setErrorMessage('신체 부위를 하나 이상 선택해주세요.');
                 return;
             }
         }
@@ -93,7 +92,13 @@ export default function CutPage() {
     };
 
     const handlePrevious = () => {
-        setErrorMessage(""); // 오류 메시지 초기화
+        const initialErrorMessage = (
+            step === 2 ? "신장과 어깨너비를 모르는 경우, 아래의 줄자를 이용해주세요"
+            : step === 3 ? "가로와 세로 모듈 수를 모르는 경우, 매트 위 네모(■■■)를 참고해주세요"
+            : step === 4 ? "신체 부위를 선택해주세요."
+            : ""
+        );
+        setErrorMessage(initialErrorMessage);
         if (step > 1) {
             setStep(step - 1);
         }
@@ -204,7 +209,7 @@ export default function CutPage() {
                             unit="개"
                             onChange={(value) => handleInputChange("width", value)}
                             min={1}
-                            max={30}
+                            max={25}
                         />
 
                         <FormInput
@@ -215,7 +220,7 @@ export default function CutPage() {
                             unit="개"
                             onChange={(value) => handleInputChange("height", value)}
                             min={1}
-                            max={90}
+                            max={84}
                         />
                     </form>
 

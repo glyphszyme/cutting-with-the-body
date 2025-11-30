@@ -10,8 +10,8 @@ export interface GridPair {
     h: number;
 }
 
-const MAX_W = 30;
-const MAX_H = 90;
+const MAX_W = 25;
+const MAX_H = 84;
 const MIN_GRID = 1;
 const TOLERANCE = 0.1; // 10% 허용 오차
 
