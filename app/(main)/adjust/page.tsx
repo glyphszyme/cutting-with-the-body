@@ -149,6 +149,7 @@ export default function AdjustPage() {
                     height: initialStep.height,
                     display_width: initialStep.displayWidth,
                     display_height: initialStep.displayHeight,
+                    font_size_ratio: fontSizeRatio,
                     user_id: newUserId,
                     updated_at: new Date().toISOString()
                 }, { onConflict: 'id' });
@@ -235,7 +236,7 @@ export default function AdjustPage() {
     const updateFontSizeRatio = async (newRatio: number) => {
         const clamped = Math.round(Math.max(0.1, Math.min(1.0, newRatio)) * 100) / 100;
         setFontSizeRatio(clamped);
-        await supabase.from('config').update({ font_size_ratio: clamped }).eq('id', 1);
+        await supabase.from('adjustments').update({ font_size_ratio: clamped }).eq('id', 1);
     };
 
     const handleDragStart = (x: number, y: number) => {

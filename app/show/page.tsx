@@ -10,6 +10,7 @@ interface AdjustmentData {
     height: number;
     display_width: number;
     display_height: number;
+    font_size_ratio: number;
     user_id: string;
     updated_at: string;
 }
@@ -55,6 +56,9 @@ export default function ShowPage() {
                 setHeight(data.height);
                 setDisplayWidth(data.display_width || 0);
                 setDisplayHeight(data.display_height || 0);
+                if (data.font_size_ratio != null) {
+                    setConfig(prev => ({ ...prev, font_size_ratio: data.font_size_ratio }));
+                }
             }
 
             // config
@@ -64,7 +68,7 @@ export default function ShowPage() {
                 .eq('id', 1)
                 .single();
             if (configData) {
-                setConfig(configData);
+                setConfig(prev => ({ ...prev, px_per_cm_w: configData.px_per_cm_w, px_per_cm_h: configData.px_per_cm_h }));
             }
 
             // submissions에서 bodyParts 불러오기
@@ -98,6 +102,9 @@ export default function ShowPage() {
                     setHeight(newData.height);
                     setDisplayWidth(newData.display_width || 0);
                     setDisplayHeight(newData.display_height || 0);
+                    if (newData.font_size_ratio != null) {
+                        setConfig(prev => ({ ...prev, font_size_ratio: newData.font_size_ratio }));
+                    }
                 }
             )
             .subscribe();
