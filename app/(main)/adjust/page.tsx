@@ -124,7 +124,7 @@ export default function AdjustPage() {
                     display_height: initialStep.displayHeight,
                     user_id: newUserId,
                     updated_at: new Date().toISOString()
-                });
+                }, { onConflict: 'id' });
 
             if (error) {
                 console.error('초기화 실패:', error);
