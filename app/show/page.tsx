@@ -164,11 +164,14 @@ export default function ShowPage() {
         );
     }
 
+    const cropMarkLength = Math.min(charWidthPx, charHeightPx) / 2;
+
     return (
         <div className="frame" style={{
             left: `${charWidthPx / 2 * (width % 2)}px`,
-            top: `${charHeightPx / 2 * (height % 2)}px`
-        }}>
+            top: `${charHeightPx / 2 * (height % 2)}px`,
+            ['--crop-mark-length' as string]: `${cropMarkLength}px`,
+        } as React.CSSProperties}>
             <div className="crop-mark-top-left" />
             <div className="crop-mark-top-center" />
             <div className="crop-mark-top-right" />
