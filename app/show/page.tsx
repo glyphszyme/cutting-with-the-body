@@ -194,6 +194,7 @@ export default function ShowPage() {
                         fontSize: `${fontSize}px`,
                         overflow: 'hidden',
                         boxSizing: 'border-box',
+                        outline: '1px solid var(--color-text)',
                     }}>
                         {char}
                     </div>
