@@ -183,7 +183,10 @@ export default function ShowPage() {
                     gridTemplateColumns: `repeat(${width}, 1fr)`,
                     gridTemplateRows: `repeat(${height}, 1fr)`,
                     width: `${W_show_px}px`,
-                    height: `${H_show_px}px`
+                    height: `${H_show_px}px`,
+                    borderTop: '1px solid var(--color-text)',
+                    borderLeft: '1px solid var(--color-text)',
+                    boxSizing: 'border-box',
                 }}
             >
                 {displayText.split('').map((char, index) => (
@@ -194,7 +197,8 @@ export default function ShowPage() {
                         fontSize: `${fontSize}px`,
                         overflow: 'hidden',
                         boxSizing: 'border-box',
-                        outline: '1px solid var(--color-text)',
+                        borderRight: '1px solid var(--color-text)',
+                        borderBottom: '1px solid var(--color-text)',
                     }}>
                         {char}
                     </div>
