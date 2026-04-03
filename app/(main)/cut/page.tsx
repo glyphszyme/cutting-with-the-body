@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSetFrameLinks } from "@/hooks/useSetFrameLinks";
 import FormInput from "@/components/FormInput";
 import BodyPartSelector from "@/components/BodyPartSelector";
 import { bodyPartGroups } from "@/data/bodyParts";
+import { supabase } from "@/lib/supabase";
 
 interface FormData {
     bodyHeight: string;
@@ -19,6 +20,22 @@ export default function CutPage() {
     const router = useRouter();
     const [step, setStep] = useState(1);
     const [errorMessage, setErrorMessage] = useState("신장과 어깨너비를 모르는 경우, 아래의 줄자를 이용해주세요.");
+    const [maxGridWidth, setMaxGridWidth] = useState(25);
+    const [maxGridHeight, setMaxGridHeight] = useState(84);
+
+    useEffect(() => {
+        supabase
+            .from('config')
+            .select('max_grid_width, max_grid_height')
+            .eq('id', 1)
+            .single()
+            .then(({ data }) => {
+                if (data) {
+                    setMaxGridWidth(data.max_grid_width);
+                    setMaxGridHeight(data.max_grid_height);
+                }
+            });
+    }, []);
 
     const [formData, setFormData] = useState<FormData>({
         bodyHeight: "",
@@ -66,17 +83,17 @@ export default function CutPage() {
                 setErrorMessage('가로 개수를 숫자로 입력해주세요.');
                 return;
             }
-            if (width <= 0 || width > 25) {
-                setErrorMessage('가로 모듈의 최대 개수는 25개입니다.');
+            if (width <= 0 || width > maxGridWidth) {
+                setErrorMessage(`가로 모듈의 최대 개수는 ${maxGridWidth}개입니다.`);
                 return;
             }
-            
+
             if (!formData.height || isNaN(height)) {
                 setErrorMessage('세로 개수를 숫자로 입력해주세요.');
                 return;
             }
-            if (height <= 0 || height > 84) {
-                setErrorMessage('세로 모듈의 최대 개수는 84개입니다.');
+            if (height <= 0 || height > maxGridHeight) {
+                setErrorMessage(`세로 모듈의 최대 개수는 ${maxGridHeight}개입니다.`);
                 return;
             }
         } else if (step === 3) {
@@ -209,7 +226,7 @@ export default function CutPage() {
                             unit="개"
                             onChange={(value) => handleInputChange("width", value)}
                             min={1}
-                            max={25}
+                            max={maxGridWidth}
                         />
 
                         <FormInput
@@ -220,7 +237,7 @@ export default function CutPage() {
                             unit="개"
                             onChange={(value) => handleInputChange("height", value)}
                             min={1}
-                            max={84}
+                            max={maxGridHeight}
                         />
                     </form>
 
