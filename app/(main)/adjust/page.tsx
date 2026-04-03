@@ -30,10 +30,14 @@ export default function AdjustPage() {
     const [isKickedOut, setIsKickedOut] = useState(false);
     const [isConnected, setIsConnected] = useState(false);
     const [touchStartX, setTouchStartX] = useState(0);
+    const [touchStartY, setTouchStartY] = useState(0);
     const [touchStartIndex, setTouchStartIndex] = useState(0);
+    const [touchStartRatio, setTouchStartRatio] = useState(0.8);
     const [isDragging, setIsDragging] = useState(false);
+    const [dragDirection, setDragDirection] = useState<'none' | 'horizontal' | 'vertical'>('none');
     const [maxGridWidth, setMaxGridWidth] = useState(25);
     const [maxGridHeight, setMaxGridHeight] = useState(84);
+    const [fontSizeRatio, setFontSizeRatio] = useState(0.8);
 
     const currentStep = useMemo(() => {
         return gridSequence[stepIndex] || { width: 10, height: 30, displayWidth: 0, displayHeight: 0 };
@@ -53,12 +57,13 @@ export default function AdjustPage() {
         const fetchConfig = async () => {
             const { data } = await supabase
                 .from('config')
-                .select('max_grid_width, max_grid_height')
+                .select('max_grid_width, max_grid_height, font_size_ratio')
                 .eq('id', 1)
                 .single();
             if (data) {
                 setMaxGridWidth(data.max_grid_width);
                 setMaxGridHeight(data.max_grid_height);
+                setFontSizeRatio(data.font_size_ratio);
             }
         };
         fetchConfig();
@@ -223,50 +228,60 @@ export default function AdjustPage() {
     let displayWidth = c * currentStep.width;
     let displayHeight = c * currentStep.height;
 
-    const handleTouchStart = (e: React.TouchEvent) => {
-        setTouchStartX(e.touches[0].clientX);
-        setTouchStartIndex(stepIndex);
+    const DIRECTION_THRESHOLD = 10; // 방향 결정 임계값 (px)
+    const GRID_STEP_PX = 20;        // 좌우: 20px당 1 단계
+    const RATIO_PX = 30;            // 상하: 30px당 0.1 변경
+
+    const updateFontSizeRatio = async (newRatio: number) => {
+        const clamped = Math.round(Math.max(0.1, Math.min(1.0, newRatio)) * 100) / 100;
+        setFontSizeRatio(clamped);
+        await supabase.from('config').update({ font_size_ratio: clamped }).eq('id', 1);
     };
 
-    const handleTouchMove = (e: React.TouchEvent) => {
-        const deltaX = e.touches[0].clientX - touchStartX;
-        const swipeThreshold = 20; // 20px당 1 단계 변경
-        const steps = Math.round(deltaX / swipeThreshold);
-        const newIndex = Math.max(0, Math.min(gridSequence.length - 1, touchStartIndex + steps));
-        
-        if (newIndex !== stepIndex) {
-            updateStepIndex(newIndex);
+    const handleDragStart = (x: number, y: number) => {
+        setTouchStartX(x);
+        setTouchStartY(y);
+        setTouchStartIndex(stepIndex);
+        setTouchStartRatio(fontSizeRatio);
+        setDragDirection('none');
+    };
+
+    const handleDragMove = (x: number, y: number) => {
+        const deltaX = x - touchStartX;
+        const deltaY = y - touchStartY;
+
+        // 방향 미결정 → 임계값 초과 시 결정
+        let currentDirection = dragDirection;
+        if (currentDirection === 'none') {
+            if (Math.abs(deltaX) < DIRECTION_THRESHOLD && Math.abs(deltaY) < DIRECTION_THRESHOLD) return;
+            currentDirection = Math.abs(deltaX) >= Math.abs(deltaY) ? 'horizontal' : 'vertical';
+            setDragDirection(currentDirection);
+        }
+
+        if (currentDirection === 'horizontal') {
+            const steps = Math.round(deltaX / GRID_STEP_PX);
+            const newIndex = Math.max(0, Math.min(gridSequence.length - 1, touchStartIndex + steps));
+            if (newIndex !== stepIndex) updateStepIndex(newIndex);
+        } else {
+            const ratioChange = -(deltaY / RATIO_PX) * 0.1;
+            updateFontSizeRatio(touchStartRatio + ratioChange);
         }
     };
 
-    const handleTouchEnd = () => {
-        // 터치 종료 시 현재 index를 기준으로 재설정
+    const handleDragEnd = () => {
         setTouchStartIndex(stepIndex);
-    };
-
-    // 마우스 이벤트 (데스크톱)
-    const handleMouseDown = (e: React.MouseEvent) => {
-        setIsDragging(true);
-        setTouchStartX(e.clientX);
-        setTouchStartIndex(stepIndex);
-    };
-
-    const handleMouseMove = (e: React.MouseEvent) => {
-        if (!isDragging) return;
-        const deltaX = e.clientX - touchStartX;
-        const swipeThreshold = 20;
-        const steps = Math.round(deltaX / swipeThreshold);
-        const newIndex = Math.max(0, Math.min(gridSequence.length - 1, touchStartIndex + steps));
-        
-        if (newIndex !== stepIndex) {
-            updateStepIndex(newIndex);
-        }
-    };
-
-    const handleMouseUp = () => {
+        setTouchStartRatio(fontSizeRatio);
+        setDragDirection('none');
         setIsDragging(false);
-        setTouchStartIndex(stepIndex);
     };
+
+    const handleTouchStart = (e: React.TouchEvent) => handleDragStart(e.touches[0].clientX, e.touches[0].clientY);
+    const handleTouchMove = (e: React.TouchEvent) => handleDragMove(e.touches[0].clientX, e.touches[0].clientY);
+    const handleTouchEnd = () => handleDragEnd();
+
+    const handleMouseDown = (e: React.MouseEvent) => { setIsDragging(true); handleDragStart(e.clientX, e.clientY); };
+    const handleMouseMove = (e: React.MouseEvent) => { if (!isDragging) return; handleDragMove(e.clientX, e.clientY); };
+    const handleMouseUp = () => handleDragEnd();
 
     // 로딩 중
     if (isLoading || !submissionData) {
@@ -360,7 +375,7 @@ export default function AdjustPage() {
 
                 <div className="step-footer" style={{ textAlign: 'center' }}>
                     <div>{new Date(submissionData.createdAt).toLocaleTimeString('ko-KR', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })} 업로드</div>
-                    <div>{isConnected ? '연결됨' : '연결끊김'}</div>
+                    <div>{isConnected ? '연결됨' : '연결끊김'} · 글자비율 {fontSizeRatio.toFixed(2)}</div>
                 </div>
             </main>
         </div>
