@@ -46,6 +46,7 @@ export default function SetPage() {
     const [config, setConfig] = useState<Config>(DEFAULT_CONFIG);
     const [errors, setErrors] = useState<ErrorMap>({});
     const [saved, setSaved] = useState(false);
+    const [syncedH, setSyncedH] = useState(false);
 
     useEffect(() => {
         const fetchConfig = async () => {
@@ -62,16 +63,23 @@ export default function SetPage() {
     const handleChange = (key: keyof Config, raw: string) => {
         const isInt = key === 'max_grid_width' || key === 'max_grid_height';
         const value = isInt ? parseInt(raw) : parseFloat(raw);
-        const next = { ...config, [key]: value };
+        let next = { ...config, [key]: value };
+        if (key === 'px_per_cm_w' && syncedH) {
+            next = { ...next, px_per_cm_h: value };
+        }
         setConfig(next);
         setErrors(validate(next));
         setSaved(false);
     };
 
-    const handleSyncH = () => {
-        const next = { ...config, px_per_cm_h: config.px_per_cm_w };
-        setConfig(next);
-        setErrors(validate(next));
+    const handleToggleSyncH = () => {
+        if (!syncedH) {
+            // 동기화 활성화: 세로를 가로와 동일하게
+            const next = { ...config, px_per_cm_h: config.px_per_cm_w };
+            setConfig(next);
+            setErrors(validate(next));
+        }
+        setSyncedH(prev => !prev);
         setSaved(false);
     };
 
@@ -90,27 +98,30 @@ export default function SetPage() {
         }
     };
 
-    const inputStyle: React.CSSProperties = {
+    const hasError = Object.keys(errors).length > 0;
+
+    const inputStyle = (disabled = false): React.CSSProperties => ({
         fontFamily: 'inherit',
         fontSize: 'var(--font-size-large)',
-        background: 'none',
+        background: disabled ? 'rgba(128,128,128,0.15)' : 'none',
         border: '1px solid var(--color-text)',
-        color: 'var(--color-text)',
+        color: disabled ? 'gray' : 'var(--color-text)',
         padding: '8px 12px',
         width: '100%',
         boxSizing: 'border-box',
-    };
+        opacity: disabled ? 0.5 : 1,
+    });
 
     const errorStyle: React.CSSProperties = {
         color: 'red',
         fontSize: 'var(--font-size-small)',
+        textAlign: 'left',
     };
 
     const sectionStyle: React.CSSProperties = {
         marginBottom: '32px',
     };
 
-    // 가로/세로 한 쌍을 수평 배치하는 row
     const pairRowStyle: React.CSSProperties = {
         display: 'grid',
         gridTemplateColumns: '1fr 1fr',
@@ -124,14 +135,38 @@ export default function SetPage() {
         textAlign: 'left',
     };
 
+    const syncBtnStyle: React.CSSProperties = {
+        fontFamily: 'inherit',
+        fontSize: 'var(--font-size-small)',
+        background: syncedH ? 'var(--color-text)' : 'none',
+        border: '1px solid var(--color-text)',
+        color: syncedH ? 'var(--color-bg)' : 'var(--color-text)',
+        padding: '4px 8px',
+        cursor: 'pointer',
+        textAlign: 'left',
+    };
+
     return (
         <div className="container">
-            <main>
-                <div className="step-header">
+            <main style={{
+                display: 'flex',
+                flexDirection: 'column',
+                height: '100%',
+                position: 'absolute',
+                top: 0, left: 0, right: 0, bottom: 0,
+            }}>
+                {/* 헤더 */}
+                <div className="step-header" style={{ flexShrink: 0 }}>
                     <div className="text">설정</div>
                 </div>
 
-                <div className="step-main" style={{ overflowY: 'auto' }}>
+                {/* 스크롤 영역 */}
+                <div style={{
+                    flex: 1,
+                    overflowY: 'auto',
+                    padding: '16px 0',
+                    WebkitOverflowScrolling: 'touch',
+                }}>
 
                     {/* 축척 */}
                     <div style={sectionStyle}>
@@ -140,11 +175,11 @@ export default function SetPage() {
                         <div style={pairRowStyle}>
                             {/* 가로 비율 */}
                             <div style={fieldStyle}>
-                                <span className="text">가로 비율</span>
+                                <span className="text" style={{ textAlign: 'left' }}>가로 비율</span>
                                 <input
                                     type="number"
                                     step="0.01"
-                                    style={inputStyle}
+                                    style={inputStyle()}
                                     value={isNaN(config.px_per_cm_w) ? '' : config.px_per_cm_w}
                                     onChange={e => handleChange('px_per_cm_w', e.target.value)}
                                 />
@@ -153,29 +188,17 @@ export default function SetPage() {
 
                             {/* 세로 비율 */}
                             <div style={fieldStyle}>
-                                <span className="text">세로 비율</span>
+                                <span className="text" style={{ textAlign: 'left' }}>세로 비율</span>
                                 <input
                                     type="number"
                                     step="0.01"
-                                    style={inputStyle}
+                                    disabled={syncedH}
+                                    style={inputStyle(syncedH)}
                                     value={isNaN(config.px_per_cm_h) ? '' : config.px_per_cm_h}
                                     onChange={e => handleChange('px_per_cm_h', e.target.value)}
                                 />
-                                <button
-                                    onClick={handleSyncH}
-                                    className="text"
-                                    style={{
-                                        fontFamily: 'inherit',
-                                        fontSize: 'var(--font-size-small)',
-                                        background: 'none',
-                                        border: '1px solid var(--color-text)',
-                                        color: 'var(--color-text)',
-                                        padding: '4px 8px',
-                                        cursor: 'pointer',
-                                        textAlign: 'left',
-                                    }}
-                                >
-                                    가로와 동일하게
+                                <button style={syncBtnStyle} onClick={handleToggleSyncH}>
+                                    {syncedH ? '동기화 해제' : '가로와 동일하게'}
                                 </button>
                                 {errors.px_per_cm_h && <span style={errorStyle}>{errors.px_per_cm_h}</span>}
                             </div>
@@ -187,7 +210,9 @@ export default function SetPage() {
                         <div className="text" style={{ marginBottom: '12px', textAlign: 'left' }}>글자 비율</div>
 
                         <div style={fieldStyle}>
-                            <span className="text">{isNaN(config.font_size_ratio) ? '-' : config.font_size_ratio}</span>
+                            <span className="text" style={{ textAlign: 'left' }}>
+                                {isNaN(config.font_size_ratio) ? '-' : config.font_size_ratio}
+                            </span>
                             <input
                                 type="range"
                                 min={LIMITS.font_size_ratio.min}
@@ -200,7 +225,7 @@ export default function SetPage() {
                             <input
                                 type="number"
                                 step="0.01"
-                                style={inputStyle}
+                                style={inputStyle()}
                                 value={isNaN(config.font_size_ratio) ? '' : config.font_size_ratio}
                                 onChange={e => handleChange('font_size_ratio', e.target.value)}
                             />
@@ -215,13 +240,13 @@ export default function SetPage() {
                         <div style={pairRowStyle}>
                             {/* 가로 최대 개수 */}
                             <div style={fieldStyle}>
-                                <span className="text">가로 최대 개수</span>
+                                <span className="text" style={{ textAlign: 'left' }}>가로 최대 개수</span>
                                 <input
                                     type="number"
                                     min={LIMITS.max_grid_width.min}
                                     max={LIMITS.max_grid_width.max}
                                     step="1"
-                                    style={inputStyle}
+                                    style={inputStyle()}
                                     value={isNaN(config.max_grid_width) ? '' : config.max_grid_width}
                                     onChange={e => handleChange('max_grid_width', e.target.value)}
                                 />
@@ -230,13 +255,13 @@ export default function SetPage() {
 
                             {/* 세로 최대 개수 */}
                             <div style={fieldStyle}>
-                                <span className="text">세로 최대 개수</span>
+                                <span className="text" style={{ textAlign: 'left' }}>세로 최대 개수</span>
                                 <input
                                     type="number"
                                     min={LIMITS.max_grid_height.min}
                                     max={LIMITS.max_grid_height.max}
                                     step="1"
-                                    style={inputStyle}
+                                    style={inputStyle()}
                                     value={isNaN(config.max_grid_height) ? '' : config.max_grid_height}
                                     onChange={e => handleChange('max_grid_height', e.target.value)}
                                 />
@@ -247,22 +272,23 @@ export default function SetPage() {
 
                 </div>
 
-                <div className="step-footer">
+                {/* 저장 버튼 — 항상 하단 고정 */}
+                <div style={{ flexShrink: 0, paddingTop: '12px' }}>
                     <button
                         onClick={handleSave}
                         className="text"
                         style={{
-                            background: Object.keys(errors).length > 0 ? 'gray' : 'var(--color-text)',
+                            background: hasError ? 'gray' : 'var(--color-text)',
                             color: 'var(--color-bg)',
                             border: 'none',
                             padding: '12px 24px',
-                            cursor: Object.keys(errors).length > 0 ? 'not-allowed' : 'pointer',
+                            cursor: hasError ? 'not-allowed' : 'pointer',
                             fontFamily: 'inherit',
                             fontSize: 'var(--font-size-large)',
                             width: '100%',
                         }}
                     >
-                        {saved ? '저장됨' : Object.keys(errors).length > 0 ? '입력값을 확인해주세요' : '저장'}
+                        {saved ? '저장됨' : hasError ? '입력값을 확인해주세요' : '저장'}
                     </button>
                 </div>
             </main>
