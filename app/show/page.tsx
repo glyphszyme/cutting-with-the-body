@@ -98,6 +98,7 @@ export default function ShowPage() {
                 { event: '*', schema: 'public', table: 'adjustments', filter: 'id=eq.1' },
                 (payload) => {
                     const newData = payload.new as AdjustmentData;
+                    console.log('[adjustments realtime]', newData);
                     if (newData.width != null) setWidth(newData.width);
                     if (newData.height != null) setHeight(newData.height);
                     if (newData.display_width != null) setDisplayWidth(newData.display_width);
