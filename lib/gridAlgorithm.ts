@@ -1,6 +1,6 @@
 /**
  * 그리드 조합 생성 알고리즘
- * 
+ *
  * 입력: (w, h) 숫자 쌍
  * 출력: 면적을 유지하는 (w, h) 조합 리스트
  */
@@ -10,24 +10,22 @@ export interface GridPair {
     h: number;
 }
 
-const MAX_W = 25;
-const MAX_H = 84;
 const MIN_GRID = 1;
 const TOLERANCE = 0.1; // 10% 허용 오차
 
 /**
  * (w, h) 입력 → 면적 유지하며 다양한 조합 생성
  */
-export function generateGridCombinations(inputW: number, inputH: number): GridPair[] {
+export function generateGridCombinations(inputW: number, inputH: number, maxW: number, maxH: number): GridPair[] {
     const area = inputW * inputH;
     const pairs: GridPair[] = [];
     const visited = new Set<string>();
 
     // 1. 세로로 긴 사각형 구간 (w < h)
-    let w = Math.max(Math.floor(area / MAX_H), MIN_GRID);
+    let w = Math.max(Math.floor(area / maxH), MIN_GRID);
     let h = Math.floor(area / w);
 
-    while (w < h && w <= MAX_W) {
+    while (w < h && w <= maxW) {
         const h_floor = Math.floor(area / w);
         const h_ceil = Math.ceil(area / w);
 
@@ -38,7 +36,7 @@ export function generateGridCombinations(inputW: number, inputH: number): GridPa
 
         // 10% 오차 체크
         const diff = Math.abs(w * h - area);
-        if (diff / area <= TOLERANCE && h >= MIN_GRID && h <= MAX_H) {
+        if (diff / area <= TOLERANCE && h >= MIN_GRID && h <= maxH) {
             const key = `${w},${h}`;
             if (!visited.has(key)) {
                 visited.add(key);
@@ -50,10 +48,10 @@ export function generateGridCombinations(inputW: number, inputH: number): GridPa
     }
 
     // 2. 가로로 긴 사각형 구간 (w >= h)
-    h = Math.max(Math.floor(area / MAX_W), MIN_GRID);
+    h = Math.max(Math.floor(area / maxW), MIN_GRID);
     w = Math.floor(area / h);
 
-    while (h < w && h <= MAX_H) {
+    while (h < w && h <= maxH) {
         const w_floor = Math.floor(area / h);
         const w_ceil = Math.ceil(area / h);
 
@@ -64,7 +62,7 @@ export function generateGridCombinations(inputW: number, inputH: number): GridPa
 
         // 10% 오차 체크
         const diff = Math.abs(w * h - area);
-        if (diff / area <= TOLERANCE && w >= MIN_GRID && w <= MAX_W) {
+        if (diff / area <= TOLERANCE && w >= MIN_GRID && w <= maxW) {
             const key = `${w},${h}`;
             if (!visited.has(key)) {
                 visited.add(key);
@@ -78,7 +76,7 @@ export function generateGridCombinations(inputW: number, inputH: number): GridPa
     // 3. w == h (정사각형)
     const s = Math.round(Math.sqrt(area));
     const diff_square = Math.abs(s * s - area);
-    if (diff_square / area <= TOLERANCE && s >= MIN_GRID && s <= MAX_W && s <= MAX_H) {
+    if (diff_square / area <= TOLERANCE && s >= MIN_GRID && s <= maxW && s <= maxH) {
         const key = `${s},${s}`;
         if (!visited.has(key)) {
             visited.add(key);

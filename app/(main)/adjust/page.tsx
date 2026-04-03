@@ -32,6 +32,8 @@ export default function AdjustPage() {
     const [touchStartX, setTouchStartX] = useState(0);
     const [touchStartIndex, setTouchStartIndex] = useState(0);
     const [isDragging, setIsDragging] = useState(false);
+    const [maxGridWidth, setMaxGridWidth] = useState(25);
+    const [maxGridHeight, setMaxGridHeight] = useState(84);
 
     const currentStep = useMemo(() => {
         return gridSequence[stepIndex] || { width: 10, height: 30, displayWidth: 0, displayHeight: 0 };
@@ -45,6 +47,22 @@ export default function AdjustPage() {
     ], []);
 
     useSetFrameLinks({ links: frameLinks });
+
+    // config 조회
+    useEffect(() => {
+        const fetchConfig = async () => {
+            const { data } = await supabase
+                .from('config')
+                .select('max_grid_width, max_grid_height')
+                .eq('id', 1)
+                .single();
+            if (data) {
+                setMaxGridWidth(data.max_grid_width);
+                setMaxGridHeight(data.max_grid_height);
+            }
+        };
+        fetchConfig();
+    }, []);
 
     // submissions에서 최신 데이터 조회
     useEffect(() => {
@@ -94,7 +112,9 @@ export default function AdjustPage() {
                 submissionData.bodyHeight,
                 submissionData.shoulderWidth,
                 submissionData.initialWidth,
-                submissionData.initialHeight
+                submissionData.initialHeight,
+                maxGridWidth,
+                maxGridHeight,
             );
             setGridSequence(sequence);
 
@@ -103,7 +123,9 @@ export default function AdjustPage() {
                 submissionData.bodyHeight,
                 submissionData.shoulderWidth,
                 submissionData.initialWidth,
-                submissionData.initialHeight
+                submissionData.initialHeight,
+                maxGridWidth,
+                maxGridHeight,
             );
 
             // 초기 인덱스 찾기 (보정된 값 사용)
