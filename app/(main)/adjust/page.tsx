@@ -356,7 +356,7 @@ export default function AdjustPage() {
                         background: 'var(--color-bg)',
                         zIndex: 1,
                     }}>
-                        {currentStep.height}
+                        {currentStep.height * 2}cm
                     </div>
 
                     {/* 아래쪽에 width 표시 */}
@@ -369,7 +369,7 @@ export default function AdjustPage() {
                         background: 'var(--color-bg)',
                         zIndex: 1,
                     }}>
-                        {currentStep.width}
+                        {currentStep.width * 2}cm
                     </div>
                 </div>
 
