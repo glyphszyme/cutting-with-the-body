@@ -45,6 +45,7 @@ li {
 .app-container {
     width: 100vw;
     height: 100vh;
+    overflow: hidden;
 
     background: var(--color-bg);
     color: var(--color-text);

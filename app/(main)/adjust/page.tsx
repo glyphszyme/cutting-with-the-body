@@ -307,6 +307,7 @@ export default function AdjustPage() {
                         alignItems: 'center',
                         justifyContent: 'center',
                         position: 'relative',
+                        overflow: 'hidden',
                         cursor: 'ew-resize',
                         touchAction: 'none',
                         flexShrink: 0,
@@ -324,6 +325,7 @@ export default function AdjustPage() {
                         style={{
                             width: `${displayWidth}px`,
                             height: `${displayHeight}px`,
+                            flexShrink: 0,
                             border: '2px solid var(--color-bg)',
                             background: 'var(--color-text)',
                         }}
@@ -336,6 +338,8 @@ export default function AdjustPage() {
                         top: '50%',
                         transform: 'translateY(-50%)',
                         whiteSpace: 'nowrap',
+                        background: 'var(--color-bg)',
+                        zIndex: 1,
                     }}>
                         {currentStep.height}
                     </div>
@@ -347,6 +351,8 @@ export default function AdjustPage() {
                         left: '50%',
                         transform: 'translateX(-50%)',
                         whiteSpace: 'nowrap',
+                        background: 'var(--color-bg)',
+                        zIndex: 1,
                     }}>
                         {currentStep.width}
                     </div>
