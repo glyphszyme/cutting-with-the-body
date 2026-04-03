@@ -375,7 +375,7 @@ export default function AdjustPage() {
 
                 <div className="step-footer" style={{ textAlign: 'center' }}>
                     <div>{new Date(submissionData.createdAt).toLocaleTimeString('ko-KR', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })} 업로드</div>
-                    <div>{isConnected ? '연결됨' : '연결끊김'} · 글자비율 {fontSizeRatio.toFixed(2)}</div>
+                    <div>{isConnected ? '연결됨' : '연결끊김'}</div>
                 </div>
             </main>
         </div>
