@@ -288,7 +288,17 @@ export default function AdjustPage() {
     }
 
     return (
-        <div className="container">
+        <div
+            className="container"
+            style={{ cursor: 'ew-resize', touchAction: 'none' }}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseUp}
+        >
             <main>
                 <div className="step-header">
                     <div className="text">
@@ -308,17 +318,8 @@ export default function AdjustPage() {
                             width: `${displayWidth}px`,
                             height: `${displayHeight}px`,
                             border: '2px solid var(--color-bg)',
-                            cursor: 'ew-resize',
-                            touchAction: 'none',
                             background: 'var(--color-text)',
                         }}
-                        onTouchStart={handleTouchStart}
-                        onTouchMove={handleTouchMove}
-                        onTouchEnd={handleTouchEnd}
-                        onMouseDown={handleMouseDown}
-                        onMouseMove={handleMouseMove}
-                        onMouseUp={handleMouseUp}
-                        onMouseLeave={handleMouseUp}
                     />
                     
                     {/* 오른쪽에 height 표시 */}
