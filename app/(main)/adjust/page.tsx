@@ -288,30 +288,37 @@ export default function AdjustPage() {
     }
 
     return (
-        <div
-            className="container"
-            style={{ cursor: 'ew-resize', touchAction: 'none' }}
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
-            onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
-            onMouseLeave={handleMouseUp}
-        >
-            <main>
+        <div className="container">
+            <main style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
                 <div className="step-header">
                     <div className="text">
                         재단이 완료되었습니다. 중앙에 생성된 지면 위에서 손가락을 좌우로 움직여 보세요.
                     </div>
                 </div>
 
-                <div style={{
-                    position: 'absolute',
-                    top: 'calc(50% - 10px)',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                }}>
+                {/* 드래그 영역 */}
+                <div
+                    style={{
+                        width: '100%',
+                        aspectRatio: '1',
+                        border: '1px solid var(--color-text)',
+                        boxSizing: 'border-box',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        position: 'relative',
+                        cursor: 'ew-resize',
+                        touchAction: 'none',
+                        flexShrink: 0,
+                    }}
+                    onTouchStart={handleTouchStart}
+                    onTouchMove={handleTouchMove}
+                    onTouchEnd={handleTouchEnd}
+                    onMouseDown={handleMouseDown}
+                    onMouseMove={handleMouseMove}
+                    onMouseUp={handleMouseUp}
+                    onMouseLeave={handleMouseUp}
+                >
                     {/* 사각형 */}
                     <div
                         style={{
@@ -321,22 +328,22 @@ export default function AdjustPage() {
                             background: 'var(--color-text)',
                         }}
                     />
-                    
+
                     {/* 오른쪽에 height 표시 */}
                     <div className="text" style={{
                         position: 'absolute',
-                        right: `-40px`,
+                        right: 8,
                         top: '50%',
                         transform: 'translateY(-50%)',
                         whiteSpace: 'nowrap',
                     }}>
                         {currentStep.height}
                     </div>
-                    
+
                     {/* 아래쪽에 width 표시 */}
                     <div className="text" style={{
                         position: 'absolute',
-                        bottom: `-30px`,
+                        bottom: 8,
                         left: '50%',
                         transform: 'translateX(-50%)',
                         whiteSpace: 'nowrap',
@@ -345,9 +352,7 @@ export default function AdjustPage() {
                     </div>
                 </div>
 
-                <div className="step-footer" style={{
-                    textAlign: 'center',
-                }}>
+                <div className="step-footer" style={{ textAlign: 'center' }}>
                     <div>{new Date(submissionData.createdAt).toLocaleTimeString('ko-KR', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })} 업로드</div>
                     <div>{isConnected ? '연결됨' : '연결끊김'}</div>
                 </div>
