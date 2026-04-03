@@ -20,27 +20,25 @@ const DEFAULT_CONFIG: Config = {
 };
 
 const LIMITS = {
-    px_per_cm_w:      { min: 0.01, max: 200 },
-    px_per_cm_h:      { min: 0.01, max: 200 },
-    font_size_ratio:  { min: 0.01, max: 1 },
-    max_grid_width:   { min: 1,    max: 200 },
-    max_grid_height:  { min: 1,    max: 500 },
+    px_per_cm_w:     { min: 0.01, max: 200 },
+    px_per_cm_h:     { min: 0.01, max: 200 },
+    font_size_ratio: { min: 0.01, max: 1 },
+    max_grid_width:  { min: 1,    max: 200 },
+    max_grid_height: { min: 1,    max: 500 },
 };
 
 type ErrorMap = Partial<Record<keyof Config, string>>;
 
 function validate(config: Config): ErrorMap {
     const errors: ErrorMap = {};
-
     (Object.keys(LIMITS) as (keyof Config)[]).forEach(key => {
         const val = config[key];
         if (isNaN(val) || val === null || val === undefined) {
             errors[key] = '숫자를 입력해주세요.';
         } else if (val < LIMITS[key].min || val > LIMITS[key].max) {
-            errors[key] = `${LIMITS[key].min} ~ ${LIMITS[key].max} 범위여야 합니다.`;
+            errors[key] = `${LIMITS[key].min} ~ ${LIMITS[key].max}`;
         }
     });
-
     return errors;
 }
 
@@ -92,17 +90,6 @@ export default function SetPage() {
         }
     };
 
-    const sectionStyle: React.CSSProperties = {
-        marginBottom: '32px',
-    };
-
-    const labelStyle: React.CSSProperties = {
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '6px',
-        marginBottom: '16px',
-    };
-
     const inputStyle: React.CSSProperties = {
         fontFamily: 'inherit',
         fontSize: 'var(--font-size-large)',
@@ -119,15 +106,22 @@ export default function SetPage() {
         fontSize: 'var(--font-size-small)',
     };
 
-    const syncBtnStyle: React.CSSProperties = {
-        fontFamily: 'inherit',
-        fontSize: 'var(--font-size-small)',
-        background: 'none',
-        border: '1px solid var(--color-text)',
-        color: 'var(--color-text)',
-        padding: '4px 10px',
-        cursor: 'pointer',
-        alignSelf: 'flex-start',
+    const sectionStyle: React.CSSProperties = {
+        marginBottom: '32px',
+    };
+
+    // 가로/세로 한 쌍을 수평 배치하는 row
+    const pairRowStyle: React.CSSProperties = {
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        gap: '12px',
+    };
+
+    const fieldStyle: React.CSSProperties = {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '6px',
+        textAlign: 'left',
     };
 
     return (
@@ -141,41 +135,58 @@ export default function SetPage() {
 
                     {/* 축척 */}
                     <div style={sectionStyle}>
-                        <div className="text" style={{ marginBottom: '12px' }}>축척</div>
+                        <div className="text" style={{ marginBottom: '12px', textAlign: 'left' }}>축척</div>
 
-                        <label style={labelStyle}>
-                            <span className="text">가로 비율</span>
-                            <input
-                                type="number"
-                                step="0.01"
-                                style={inputStyle}
-                                value={isNaN(config.px_per_cm_w) ? '' : config.px_per_cm_w}
-                                onChange={e => handleChange('px_per_cm_w', e.target.value)}
-                            />
-                            {errors.px_per_cm_w && <span style={errorStyle}>{errors.px_per_cm_w}</span>}
-                        </label>
+                        <div style={pairRowStyle}>
+                            {/* 가로 비율 */}
+                            <div style={fieldStyle}>
+                                <span className="text">가로 비율</span>
+                                <input
+                                    type="number"
+                                    step="0.01"
+                                    style={inputStyle}
+                                    value={isNaN(config.px_per_cm_w) ? '' : config.px_per_cm_w}
+                                    onChange={e => handleChange('px_per_cm_w', e.target.value)}
+                                />
+                                {errors.px_per_cm_w && <span style={errorStyle}>{errors.px_per_cm_w}</span>}
+                            </div>
 
-                        <label style={labelStyle}>
-                            <span className="text">세로 비율</span>
-                            <input
-                                type="number"
-                                step="0.01"
-                                style={inputStyle}
-                                value={isNaN(config.px_per_cm_h) ? '' : config.px_per_cm_h}
-                                onChange={e => handleChange('px_per_cm_h', e.target.value)}
-                            />
-                            <button style={syncBtnStyle} onClick={handleSyncH}>
-                                가로 비율과 동일하게 설정
-                            </button>
-                            {errors.px_per_cm_h && <span style={errorStyle}>{errors.px_per_cm_h}</span>}
-                        </label>
+                            {/* 세로 비율 */}
+                            <div style={fieldStyle}>
+                                <span className="text">세로 비율</span>
+                                <input
+                                    type="number"
+                                    step="0.01"
+                                    style={inputStyle}
+                                    value={isNaN(config.px_per_cm_h) ? '' : config.px_per_cm_h}
+                                    onChange={e => handleChange('px_per_cm_h', e.target.value)}
+                                />
+                                <button
+                                    onClick={handleSyncH}
+                                    className="text"
+                                    style={{
+                                        fontFamily: 'inherit',
+                                        fontSize: 'var(--font-size-small)',
+                                        background: 'none',
+                                        border: '1px solid var(--color-text)',
+                                        color: 'var(--color-text)',
+                                        padding: '4px 8px',
+                                        cursor: 'pointer',
+                                        textAlign: 'left',
+                                    }}
+                                >
+                                    가로와 동일하게
+                                </button>
+                                {errors.px_per_cm_h && <span style={errorStyle}>{errors.px_per_cm_h}</span>}
+                            </div>
+                        </div>
                     </div>
 
                     {/* 글자 비율 */}
                     <div style={sectionStyle}>
-                        <div className="text" style={{ marginBottom: '12px' }}>글자 비율</div>
+                        <div className="text" style={{ marginBottom: '12px', textAlign: 'left' }}>글자 비율</div>
 
-                        <label style={labelStyle}>
+                        <div style={fieldStyle}>
                             <span className="text">{isNaN(config.font_size_ratio) ? '-' : config.font_size_ratio}</span>
                             <input
                                 type="range"
@@ -194,40 +205,44 @@ export default function SetPage() {
                                 onChange={e => handleChange('font_size_ratio', e.target.value)}
                             />
                             {errors.font_size_ratio && <span style={errorStyle}>{errors.font_size_ratio}</span>}
-                        </label>
+                        </div>
                     </div>
 
                     {/* 최대 개수 */}
                     <div style={sectionStyle}>
-                        <div className="text" style={{ marginBottom: '12px' }}>최대 개수</div>
+                        <div className="text" style={{ marginBottom: '12px', textAlign: 'left' }}>최대 개수</div>
 
-                        <label style={labelStyle}>
-                            <span className="text">가로 최대 개수</span>
-                            <input
-                                type="number"
-                                min={LIMITS.max_grid_width.min}
-                                max={LIMITS.max_grid_width.max}
-                                step="1"
-                                style={inputStyle}
-                                value={isNaN(config.max_grid_width) ? '' : config.max_grid_width}
-                                onChange={e => handleChange('max_grid_width', e.target.value)}
-                            />
-                            {errors.max_grid_width && <span style={errorStyle}>{errors.max_grid_width}</span>}
-                        </label>
+                        <div style={pairRowStyle}>
+                            {/* 가로 최대 개수 */}
+                            <div style={fieldStyle}>
+                                <span className="text">가로 최대 개수</span>
+                                <input
+                                    type="number"
+                                    min={LIMITS.max_grid_width.min}
+                                    max={LIMITS.max_grid_width.max}
+                                    step="1"
+                                    style={inputStyle}
+                                    value={isNaN(config.max_grid_width) ? '' : config.max_grid_width}
+                                    onChange={e => handleChange('max_grid_width', e.target.value)}
+                                />
+                                {errors.max_grid_width && <span style={errorStyle}>{errors.max_grid_width}</span>}
+                            </div>
 
-                        <label style={labelStyle}>
-                            <span className="text">세로 최대 개수</span>
-                            <input
-                                type="number"
-                                min={LIMITS.max_grid_height.min}
-                                max={LIMITS.max_grid_height.max}
-                                step="1"
-                                style={inputStyle}
-                                value={isNaN(config.max_grid_height) ? '' : config.max_grid_height}
-                                onChange={e => handleChange('max_grid_height', e.target.value)}
-                            />
-                            {errors.max_grid_height && <span style={errorStyle}>{errors.max_grid_height}</span>}
-                        </label>
+                            {/* 세로 최대 개수 */}
+                            <div style={fieldStyle}>
+                                <span className="text">세로 최대 개수</span>
+                                <input
+                                    type="number"
+                                    min={LIMITS.max_grid_height.min}
+                                    max={LIMITS.max_grid_height.max}
+                                    step="1"
+                                    style={inputStyle}
+                                    value={isNaN(config.max_grid_height) ? '' : config.max_grid_height}
+                                    onChange={e => handleChange('max_grid_height', e.target.value)}
+                                />
+                                {errors.max_grid_height && <span style={errorStyle}>{errors.max_grid_height}</span>}
+                            </div>
+                        </div>
                     </div>
 
                 </div>
