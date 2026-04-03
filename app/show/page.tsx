@@ -98,10 +98,10 @@ export default function ShowPage() {
                 { event: '*', schema: 'public', table: 'adjustments', filter: 'id=eq.1' },
                 (payload) => {
                     const newData = payload.new as AdjustmentData;
-                    setWidth(newData.width);
-                    setHeight(newData.height);
-                    setDisplayWidth(newData.display_width || 0);
-                    setDisplayHeight(newData.display_height || 0);
+                    if (newData.width != null) setWidth(newData.width);
+                    if (newData.height != null) setHeight(newData.height);
+                    if (newData.display_width != null) setDisplayWidth(newData.display_width);
+                    if (newData.display_height != null) setDisplayHeight(newData.display_height);
                     if (newData.font_size_ratio != null) {
                         setConfig(prev => ({ ...prev, font_size_ratio: newData.font_size_ratio }));
                     }
